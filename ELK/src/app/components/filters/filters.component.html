@@ -27,14 +27,15 @@
         Дата
       </a>
       <div (click)="stopPropagation($event)" id="dateDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item" href="#"><input name="date" type="radio" id="newToOld" (click)="addDateSort($event.target)"><label for="newToOld">От новых к старым</label></a>
-        <a class="dropdown-item" href="#"><input name="date" type="radio" id="oldToNew" (click)="addDateSort($event.target)"><label for="oldToNew">От старых к новым</label></a>
-        <a class="dropdown-item" href="#"><input name="date" type="radio" id="dateFilter" (click)="addDateSort($event.target)"><label for="dateFilter">За период времени</label>
-            <input (input)="checkDate($event)" id="one" type="text" name="date" class="tcal form-control" value="" />
-            <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div><br>
-            <input (input)="checkDate($event)" id="two" type="text" name="date" class="tcal form-control" value="" />
-            <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div>
-        </a>
+        <label (click)="addDateSort($event.target)" for="newToOld"><a class="dropdown-item"><input name="date" type="radio" id="newToOld">От новых к старым</a></label>
+        <label (click)="addDateSort($event.target)" for="oldToNew"><a class="dropdown-item"><input name="date" type="radio" id="oldToNew">От старых к новым</a></label>
+        <label for="dateFilter"><a class="dropdown-item"><input name="date" type="radio" id="dateFilter">За период времени
+          <input (input)="validateDate($event)" id="startDate" type="text" name="date" class="tcal form-control" value="" placeholder="Начало периода"/>
+          <div class="invalid-feedback" style="visibility: hidden"></div>
+          <br>
+          <input (input)="validateDate($event)" id="endDate" type="text" name="date" class="tcal form-control" value="" placeholder="Конец периода"/>
+          <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div>
+        </a></label>
       </div>
     </div>
   </div>

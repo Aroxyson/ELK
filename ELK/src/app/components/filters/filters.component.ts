@@ -2,6 +2,7 @@ import {Component, OnInit, Output} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-filters',
@@ -12,6 +13,8 @@ export class FiltersComponent implements OnInit {
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
   flags = new Flags();
+  tempDateStart: moment.Moment;
+  tempDateEnd: moment.Moment;
 
   constructor() {}
 
@@ -58,7 +61,7 @@ export class FiltersComponent implements OnInit {
     event.stopPropagation();
   }
 
-  checkDate(event) {
+  validateDate(event) {
     const inputElement = event.path[0];
     const inputDate = event.path[0].value;
     const regexpDate = '^(?:(?:31(\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^' +
@@ -67,11 +70,35 @@ export class FiltersComponent implements OnInit {
 
     if (inputDate.match(regexpDate)) {
       inputElement.nextSibling.style.visibility = 'hidden';
+      inputElement.nextSibling.textContent = 'Дата в формате дд.мм.ггг';
       inputElement.classList.remove('is-invalid');
       inputElement.classList.add('is-valid');
     } else {
       inputElement.nextSibling.style.visibility = 'visible';
       inputElement.classList.add('is-invalid');
+    }
+
+    if (this.isPeriodRight(inputElement)) {
+      this.flags.dateFilterStart = this.tempDateStart;
+      this.flags.dateFilterEnd = this.tempDateEnd;
+    } else {
+      inputElement.nextSibling.style.visibility = 'visible';
+      inputElement.nextSibling.textContent = 'Неверно задан период';
+      inputElement.classList.add('is-invalid');
+    }
+  }
+
+  isPeriodRight(inputElement: HTMLInputElement) {
+    switch (inputElement.id) {
+      case 'startDate':
+        this.tempDateStart = moment(inputElement.value, 'DD-MM-YYYY');
+        break;
+      case 'endDate':
+        this.tempDateEnd = moment(inputElement.value, 'DD-MM-YYYY');
+        break;
+    }
+    if (this.tempDateStart && this.tempDateEnd) {
+      return moment(this.tempDateStart).isBefore(this.tempDateEnd);
     }
   }
 }

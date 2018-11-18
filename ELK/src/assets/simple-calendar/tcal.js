@@ -184,7 +184,6 @@ function f_tcalOnClick () {
 		document.getElementById("dateDropdown").appendChild(e_cal);
 	}
 	e_cal.innerHTML = f_tcalGetHTML(null);
-    console.dir(this);
 	e_cal.style.top = this.offsetTop - 2 + 'px';
 	e_cal.style.left = (this.offsetWidth) + 26 + 'px';
 	e_cal.style.visibility = 'visible';

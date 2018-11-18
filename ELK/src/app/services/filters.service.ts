@@ -13,10 +13,7 @@ export class FiltersService {
   filterByFlag(notification: Notification[], flags: Flags): Notification[] {
     function isContainAll(notificationFunc: Notification, flagsFunc: Flags): boolean {
       for (const key in flagsFunc) {
-        // console.log('notificationFunc.type', notificationFunc.type);
-        // console.log('key', key);
         if ((flagsFunc[key] === true) && (notificationFunc.type === key)) {
-          // console.log('notificationFunc.type', notificationFunc.type);
           return true;
         }
       }

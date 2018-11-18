@@ -1,4 +1,5 @@
 import {dateSortOrder} from './dateSortOrder';
+import * as moment from 'moment';
 
 export class Flags {
   request = false;
@@ -6,9 +7,7 @@ export class Flags {
   revision = false;
   nameSort = false;
   dateSortOrder: dateSortOrder = dateSortOrder.disabled;
-  dateFilter = {
-    start: Date,
-    end: Date
-  };
+  dateFilterStart: moment.Moment;
+  dateFilterEnd: moment.Moment;
   importance = false;
 }
