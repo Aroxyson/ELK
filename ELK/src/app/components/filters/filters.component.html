@@ -7,7 +7,7 @@
       <a class="dropdown-toggle" href="#" role="button" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Тип сообщения
       </a>
-      <div class="dropdown-menu" aria-labelledby="dropdown">
+      <div (click)="stopPropagation($event)" class="dropdown-menu" aria-labelledby="dropdown">
         <a class="dropdown-item" href="#"><input type="checkbox" id="request" (change)="addToFlags($event.target)"><label for="request">Заявка</label></a>
         <a class="dropdown-item" href="#"><input type="checkbox" id="approval" (change)="addToFlags($event.target)"><label for="approval">Согласование</label></a>
         <a class="dropdown-item" href="#"><input type="checkbox" id="revision" (change)="addToFlags($event.target)"><label for="revision">На доработку</label></a>
@@ -30,8 +30,10 @@
         <a class="dropdown-item" href="#"><input name="date" type="radio" id="newToOld" (click)="addDateSort($event.target)"><label for="newToOld">От новых к старым</label></a>
         <a class="dropdown-item" href="#"><input name="date" type="radio" id="oldToNew" (click)="addDateSort($event.target)"><label for="oldToNew">От старых к новым</label></a>
         <a class="dropdown-item" href="#"><input name="date" type="radio" id="dateFilter" (click)="addDateSort($event.target)"><label for="dateFilter">За период времени</label>
-            <input id="one" type="text" name="date" class="tcal form-control" value="" /><br>
-            <input id="two" type="text" name="date" class="tcal form-control" value="" />
+            <input (input)="checkDate($event)" id="one" type="text" name="date" class="tcal form-control" value="" />
+            <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div><br>
+            <input (input)="checkDate($event)" id="two" type="text" name="date" class="tcal form-control" value="" />
+            <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div>
         </a>
       </div>
     </div>

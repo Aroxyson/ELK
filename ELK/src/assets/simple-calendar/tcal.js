@@ -153,6 +153,8 @@ function f_tcalUpdate (n_date, b_keepOpen) {
 	}
 	else {
 		e_input.value = f_tcalGenerateDate(d_date, A_TCALCONF.format);
+    var event = new Event("input");
+    e_input.dispatchEvent(event);
 		f_tcalCancel();
 	}
 }

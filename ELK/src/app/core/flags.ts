@@ -6,7 +6,6 @@ export class Flags {
   revision = false;
   nameSort = false;
   dateSortOrder: dateSortOrder = dateSortOrder.disabled;
-  dateSortForced = false;
   dateFilter = {
     start: Date,
     end: Date
