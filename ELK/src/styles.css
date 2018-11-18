@@ -1,0 +1,22 @@
+.header {
+  height: 60px;
+  background-color: #003399;
+}
+
+.nav-height {
+  height: 60px;
+}
+
+.dropdown-top {
+  width: 94px;
+  height: 24px;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--white);
+}

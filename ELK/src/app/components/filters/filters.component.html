@@ -1,0 +1,49 @@
+<div class="row border-top border-bottom py-4">
+  <div class="col-md-1">
+    <input type="checkbox">
+  </div>
+  <div class="col-md-3 text-dark">
+    <div class="dropdown">
+      <a class="dropdown-toggle" href="#" role="button" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Тип сообщения
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdown">
+        <a class="dropdown-item" href="#"><input type="checkbox" id="request" (change)="addToFlags($event.target)"><label for="request">Заявка</label></a>
+        <a class="dropdown-item" href="#"><input type="checkbox" id="approval" (change)="addToFlags($event.target)"><label for="approval">Согласование</label></a>
+        <a class="dropdown-item" href="#"><input type="checkbox" id="revision" (change)="addToFlags($event.target)"><label for="revision">На доработку</label></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="dropdown">
+      <a (click)="addNameSort()" class="dropdown-toggle" href="#" role="button" id="nameSort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Наименование
+      </a>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="dropdown">
+      <a class="dropdown-toggle dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Дата
+      </a>
+      <div (click)="stopPropagation($event)" id="dateDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#"><input name="date" type="radio" id="newToOld" (click)="addDateSort($event.target)"><label for="newToOld">От новых к старым</label></a>
+        <a class="dropdown-item" href="#"><input name="date" type="radio" id="oldToNew" (click)="addDateSort($event.target)"><label for="oldToNew">От старых к новым</label></a>
+        <a class="dropdown-item" href="#"><input name="date" type="radio" id="dateFilter" (click)="addDateSort($event.target)"><label for="dateFilter">За период времени</label>
+            <input id="one" type="text" name="date" class="tcal form-control" value="" /><br>
+            <input id="two" type="text" name="date" class="tcal form-control" value="" />
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="dropdown">
+      <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Важность
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#">Только важные</a>
+      </div>
+    </div>
+  </div>
+</div>

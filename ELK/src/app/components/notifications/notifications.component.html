@@ -1,0 +1,20 @@
+<div *ngFor="let notification of notificationsFiltered" class="row py-4">
+  <div class="col-md-1">
+    <input type="checkbox" (change)="showFlags()">
+  </div>
+  <div class="col-md-3">
+    <span id="notif-type">{{notification.typeRu}}</span>
+  </div>
+  <div class="col-md-3">
+    <span id="notif-name">{{notification.name}}</span>
+  </div>
+  <div class="col-md-2">
+    <span id="notif-date">{{notification.dateString}}</span>
+  </div>
+  <div class="col-md-3">
+    <span id="notif-important">{{notification.importance}}</span>
+  </div>
+  <div class="col-md-12">
+    <span id="notif-text">{{notification.text}}</span>
+  </div>
+</div>
