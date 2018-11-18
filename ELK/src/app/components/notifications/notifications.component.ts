@@ -33,6 +33,11 @@ export class NotificationsComponent implements OnInit, OnChanges {
     } else {
       this.notificationsFiltered = this.notifications;
     }
+    console.log(current.dateFilterStart);
+    if (current.dateFilterStart && current.dateFilterEnd) {
+      console.log('dateFilter');
+      this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
+    }
 
     function Queue(arrayFunc: Array<any>) {
       this.run = function() {

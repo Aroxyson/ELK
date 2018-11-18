@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Flags} from '../core/flags';
 import {Notification} from '../core/notification';
 import {dateSortOrder} from '../core/dateSortOrder';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,13 @@ export class FiltersService {
     }
     return notification.filter
     (item => isContainAll(item, flags));
+  }
+
+  filterByDate(notifications: Notification[], flags: Flags): Notification[] {
+    function isInPeriod(notification: Notification, flagsFunc: Flags): boolean {
+      return (moment(notification.date).isBefore(flagsFunc.dateFilterEnd) && moment(flagsFunc.dateFilterStart).isBefore(notification.date));
+    }
+    return notifications.filter(item => isInPeriod(item, flags));
   }
 
   sortNotificationsByName(notifications: Notification[], order: boolean): Notification[] {
