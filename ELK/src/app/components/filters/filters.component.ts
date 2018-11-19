@@ -54,11 +54,19 @@ export class FiltersComponent implements OnInit {
         this.flags.dateSortOrder = dateSortOrder.oldToNew;
         break;
     }
+    this.flags.dateFilterStart = undefined;
+    this.flags.dateFilterEnd = undefined;
     this.emitChanges();
   }
 
   stopPropagation(event) {
     event.stopPropagation();
+  }
+
+  checkRadio(event) {
+    console.dir(event);
+    const input = document.querySelector('#dateFilter');
+   // input.checked = 'checked';
   }
 
   validateDate(event) {
@@ -81,14 +89,15 @@ export class FiltersComponent implements OnInit {
       inputElement.classList.add('is-invalid');
     }
 
-    if (this.isPeriodRight(inputElement)) {
-      this.flags.dateFilterStart = this.tempDateStart;
-      this.flags.dateFilterEnd = this.tempDateEnd;
-      this.emitChanges();
-    } else {
+    if (!this.isPeriodRight(inputElement)) {
       inputElement.nextSibling.style.visibility = 'visible';
       inputElement.nextSibling.textContent = 'Неверно задан период';
       inputElement.classList.add('is-invalid');
+    } else if (this.tempDateStart && this.tempDateEnd) {
+      this.flags.dateFilterStart = this.tempDateStart;
+      this.flags.dateFilterEnd = this.tempDateEnd;
+      this.flags.dateSortOrder = dateSortOrder.newToOld;
+      this.emitChanges();
     }
   }
 

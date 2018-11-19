@@ -50,13 +50,13 @@ export class NotificationsComponent implements OnInit, OnChanges {
     }
 
     if (previous) {
-      if (current.nameSort !== previous.nameSort || previous.nameSort) {
+      if (current.nameSort !== previous.nameSort) {
         this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
         this.queueFunc.push(this.nameSort(previous, current));
       }
-      if (current.dateSortOrder !== previous.dateSortOrder && current.dateSortOrder !== dateSortOrder.disabled) {
+      if (current.dateSortOrder !== previous.dateSortOrder) {
         this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
-        this.queueFunc.push(this.dateSort(previous, current));
+        this.queueFunc.push(this.dateSort(current));
       }
     }
 
@@ -85,12 +85,8 @@ export class NotificationsComponent implements OnInit, OnChanges {
     }
   }
 
-  dateSort(previous: Flags, current: Flags) {
-    if (current.dateSortOrder === dateSortOrder.newToOld) {
-      this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, dateSortOrder.newToOld);
-    } else if (current.dateSortOrder === dateSortOrder.oldToNew) {
-      this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, dateSortOrder.oldToNew);
-    }
+  dateSort(current: Flags) {
+      this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, current);
   }
 
   showFlags() {console.log(this.flags); }

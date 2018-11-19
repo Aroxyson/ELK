@@ -52,13 +52,16 @@ export class FiltersService {
     return notifications.sort(comparator);
   }
 
-  sortNotificationsByDate(notifications: Notification[], order: dateSortOrder): Notification[] {
+  sortNotificationsByDate(notifications: Notification[], flags: Flags): Notification[] {
     let comparator;
+
     const directCompareByDate = function(a: Notification, b: Notification) {
       return a.date > b.date ? 1 : -1;
     };
 
-    switch (order) {
+    switch (flags.dateSortOrder) {
+      case dateSortOrder.disabled:
+        return;
       case dateSortOrder.oldToNew:
         comparator = directCompareByDate;
         break;
