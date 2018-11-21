@@ -9,5 +9,5 @@ export class Flags {
   dateSortOrder: dateSortOrder = dateSortOrder.disabled;
   dateFilterStart: moment.Moment;
   dateFilterEnd: moment.Moment;
-  importance = false;
+  important = false;
 }

@@ -165,7 +165,7 @@ function f_tcalOnClick () {
 	var s_pfx = A_TCALCONF.cssprefix;
 	var s_activeClass = s_pfx + 'Active';
 	var b_close = f_tcalHasClass(this, s_activeClass);
-
+  console.dir(this);
 	// close all clalendars
 	f_tcalCancel();
 	if (b_close) return;

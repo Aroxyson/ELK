@@ -27,15 +27,14 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
     const current = changes.flags.currentValue;
     const previous = changes.flags.previousValue;
-
-    if (current.request || current.approval || current.revision) {
+    console.log(current);
+    if (current.request || current.approval || current.revision || current.important) {
       this.notificationsFiltered = this.filterService.filterByFlag(this.notifications, current);
     } else {
       this.notificationsFiltered = this.notifications;
     }
-    console.log(current.dateFilterStart);
+
     if (current.dateFilterStart && current.dateFilterEnd) {
-      console.log('dateFilter');
       this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
     }
 
@@ -60,7 +59,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
       }
     }
 
-    console.log(this.queueFunc);
+   //  console.log(this.queueFunc);
 
     const queue = new Queue(this.queueFunc);
     queue.run();

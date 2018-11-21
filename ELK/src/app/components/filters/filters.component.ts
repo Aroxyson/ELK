@@ -26,15 +26,19 @@ export class FiltersComponent implements OnInit {
     this.flagsOut.emit(Object.assign({}, this.flags));
   }
   addToFlags(input: HTMLInputElement) {
-    switch (input.nextSibling.firstChild.textContent) {
-      case 'Заявка':
+    console.dir(input);
+    switch (input.id) {
+      case 'request':
         this.flags.request = input.checked;
         break;
-      case 'Согласование':
+      case 'approval':
         this.flags.approval = input.checked;
         break;
-      case 'На доработку':
+      case 'revision':
         this.flags.revision = input.checked;
+        break;
+      case 'importance':
+        this.flags.important = input.checked;
         break;
     }
     this.emitChanges();
@@ -57,16 +61,36 @@ export class FiltersComponent implements OnInit {
     this.flags.dateFilterStart = undefined;
     this.flags.dateFilterEnd = undefined;
     this.emitChanges();
+
+    this.enableInput();
   }
 
   stopPropagation(event) {
     event.stopPropagation();
   }
 
-  checkRadio(event) {
-    console.dir(event);
-    const input = document.querySelector('#dateFilter');
-   // input.checked = 'checked';
+  enableInput() {
+    const radio: HTMLInputElement = document.querySelector('input[id="dateFilter"]');
+    const startDate = <HTMLInputElement> document.getElementById('startDate');
+    const endDate = <HTMLInputElement> document.getElementById('endDate');
+
+    if (radio.checked) {
+      startDate.disabled = false;
+      endDate.disabled = false;
+    } else {
+      startDate.disabled = true;
+      endDate.disabled = true;
+      startDate.value = '';
+      endDate.value = '';
+      startDate.classList.remove('is-invalid');
+      startDate.classList.remove('is-valid');
+      startDate.classList.remove('tcalActive');
+      endDate.classList.remove('is-invalid');
+      endDate.classList.remove('is-valid');
+      endDate.classList.remove('tcalActive');
+      const tCal = document.getElementById('tcal');
+      tCal.style.visibility = '';
+    }
   }
 
   validateDate(event) {
@@ -110,6 +134,7 @@ export class FiltersComponent implements OnInit {
         this.tempDateEnd = moment(inputElement.value, 'DD-MM-YYYY');
         break;
     }
+
     if (this.tempDateStart === undefined || this.tempDateEnd === undefined) {
       console.log('undefined');
       return true;
