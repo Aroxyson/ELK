@@ -4,9 +4,11 @@ export class Notification {
   name = '';
   date: Date;
   dateString = '';
-  importance = '';
+  important = false;
   importanceRu = '';
   text = '';
+  checked = false;
+  read = false;
 
   constructor(json_item?: any) {
     const options = {
@@ -31,7 +33,7 @@ export class Notification {
     }
 
     if (json_item.importance === 'Важно') {
-      this.importance = 'important';
+      this.important = true;
     }
     this.importanceRu = json_item.importance;
     this.typeRu = json_item.type;

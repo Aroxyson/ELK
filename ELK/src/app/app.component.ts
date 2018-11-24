@@ -8,8 +8,13 @@ import {Flags} from './core/flags';
 })
 export class AppComponent {
   flags = new Flags();
+  checkedStatus = false;
 
   setFlags(flagsIn: Flags) {
     this.flags = flagsIn;
+  }
+
+  sendCheckedStatus(checked: boolean) {
+    this.checkedStatus = checked;
   }
 }

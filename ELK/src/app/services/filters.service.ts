@@ -11,21 +11,36 @@ export class FiltersService {
 
   constructor() { }
 
-  filterByFlag(notification: Notification[], flags: Flags): Notification[] {
-    function isContainAll(notificationFunc: Notification, flagsFunc: Flags): boolean {
-      for (const key in notificationFunc) {
+  filterByType(notification: Notification[], flags: Flags): Notification[] {
+    function isContainAny(notificationFunc: Notification, flagsFunc: Flags): boolean {
         for (const flag in flagsFunc) {
-          if (flagsFunc[flag] && (notificationFunc[key] === flag)) {
+          if (flagsFunc[flag] && (notificationFunc.type === flag)) {
             return true;
           }
         }
-      }
     }
+
     if (!flags) {
       return notification;
     }
+
     return notification.filter
-    (item => isContainAll(item, flags));
+    (item => isContainAny(item, flags));
+  }
+
+  filterByImportance(notification: Notification[], flags: Flags): Notification[] {
+    function isContain(notificationFunc: Notification, flagsFunc: Flags): boolean {
+      if (flagsFunc.important && notificationFunc.important) {
+        return true;
+      }
+    }
+
+    if (!flags) {
+      return notification;
+    }
+
+    return notification.filter
+    (item => isContain(item, flags));
   }
 
   filterByDate(notifications: Notification[], flags: Flags): Notification[] {
@@ -33,6 +48,22 @@ export class FiltersService {
       return (moment(notification.date).isBefore(flagsFunc.dateFilterEnd) && moment(flagsFunc.dateFilterStart).isBefore(notification.date));
     }
     return notifications.filter(item => isInPeriod(item, flags));
+  }
+
+  filterByName(notifications: Notification[], searchText: string): Notification[] {
+    if (!searchText) {
+      return notifications;
+    }
+
+    if (!notifications) {
+      return [];
+    }
+
+    searchText = searchText.toLowerCase();
+
+    return notifications.filter( item => {
+      return item.text.toLowerCase().includes(searchText);
+    });
   }
 
   sortNotificationsByName(notifications: Notification[], order: boolean): Notification[] {

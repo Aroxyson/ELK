@@ -1,12 +1,17 @@
-<div class="row border-top border-bottom py-4">
-  <div class="col-md-1">
-    <input type="checkbox">
+<div class="row">
+  <div class="col-md-6 nav-height">
+    <input (input)="addToFlags(($event.target))" id="search-filter" class="form-control mr-sm-2" type="search" placeholder="Поиск по уведомлениям" aria-label="Search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>
   </div>
+  <div class="col-md-6">
+  </div>
+</div>
+<div class="row border-top border-bottom py-4">
   <div class="col-md-3 text-dark">
     <div class="dropdown">
-      <a class="dropdown-toggle" href="#" role="button" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <input (change)="addToFlags($event.target)" type="checkbox" id="check-all" class="notif-checkbox">
+      <span class="dropdown-toggle column-title" href="#" role="button" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Тип сообщения
-      </a>
+      </span>
       <div (click)="stopPropagation($event)" class="dropdown-menu" aria-labelledby="dropdown">
         <a class="dropdown-item" href="#"><input type="checkbox" id="request" (change)="addToFlags($event.target)"><label for="request">Заявка</label></a>
         <a class="dropdown-item" href="#"><input type="checkbox" id="approval" (change)="addToFlags($event.target)"><label for="approval">Согласование</label></a>
@@ -16,17 +21,16 @@
   </div>
   <div class="col-md-3">
     <div class="dropdown">
-      <a  class="dropdown-toggle" href="#" role="button" id="nameSort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span (click)="addNameSort()" class="dropdown-toggle  column-title" href="#" role="button" id="nameSort" data-toggle="dropdown" aria-expanded="false">
         Наименование
-      </a>
-      <a (click)="addNameSort()" href="#">AAAAAAAAAA</a>
+      </span>
     </div>
   </div>
   <div class="col-md-2">
     <div class="dropdown">
-      <a class="dropdown-toggle dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="dropdown-toggle dropdown-toggle  column-title" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Дата
-      </a>
+      </span>
       <div (click)="stopPropagation($event)" id="dateDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <label (click)="addDateSort($event.target)" for="newToOld"><a class="dropdown-item"><input name="date" type="radio" id="newToOld">От новых к старым</a></label>
         <label (click)="addDateSort($event.target)" for="oldToNew"><a class="dropdown-item"><input name="date" type="radio" id="oldToNew">От старых к новым</a></label>
@@ -45,9 +49,9 @@
   </div>
   <div class="col-md-3">
     <div class="dropdown">
-      <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="dropdown-toggle  column-title" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Важность
-      </a>
+      </span>
       <div (click)="stopPropagation($event)" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <a class="dropdown-item"><input (change)="addToFlags($event.target)" name="importance" type="checkbox" id="importance"><label for="importance">Только важные</label></a>
       </div>

@@ -62,17 +62,10 @@
       </ul>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-6 nav-height">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-    </div>
-    <div class="col-md-6">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
-      <app-filters (flagsOut)="setFlags($event)"></app-filters>
-      <app-notifications [flags]="flags"></app-notifications>
+    <div class="row">
+    <div class="col-md-7">
+      <app-filters (flagsOut)="setFlags($event)" [checkedStatus]="checkedStatus"></app-filters>
+      <app-notifications (checkedStatusOut)="sendCheckedStatus($event)" [flags]="flags"></app-notifications>
       <div class="row">
         <div class="col-md-12">
         </div>

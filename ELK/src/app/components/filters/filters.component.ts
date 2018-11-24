@@ -1,8 +1,9 @@
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
 import * as moment from 'moment';
+import {FiltersService} from '../../services/filters.service';
 
 @Component({
   selector: 'app-filters',
@@ -10,17 +11,22 @@ import * as moment from 'moment';
   styleUrls: ['./filters.component.css']
 })
 export class FiltersComponent implements OnInit {
+  @Input() checkedStatus;
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
   flags = new Flags();
   tempDateStart: moment.Moment;
   tempDateEnd: moment.Moment;
 
-  constructor() {}
+  constructor(private filterService: FiltersService) {}
 
   ngOnInit() {
     this.flags = new Flags();
   }
+
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes.checkedStatus.currentValue =)
+  // }
 
   emitChanges() {
     this.flagsOut.emit(Object.assign({}, this.flags));
@@ -40,6 +46,11 @@ export class FiltersComponent implements OnInit {
       case 'importance':
         this.flags.important = input.checked;
         break;
+      case 'check-all':
+        this.flags.checkAll = input.checked;
+        break;
+      case 'search-filter':
+        this.flags.searchFilter = input.value;
     }
     this.emitChanges();
     }

@@ -1,8 +1,11 @@
-<div *ngFor="let notification of notificationsFiltered" class="row py-4">
-  <div class="col-md-1">
-    <input type="checkbox" (change)="showFlags()">
-  </div>
+<div *ngIf="checkedNotifications.length > 0" class="btn-group notif-action-group">
+  <button (click)="markAs($event.target.id)" class="notif-action" id="as-archive">Архивировать</button>
+  <button (click)="markAs($event.target.id)" class="notif-action" id="as-read">Отметить как прочитанное</button>
+  <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
+</div>
+<div *ngFor="let notification of notificationsFiltered" class="row py-4 border-bottom">
   <div class="col-md-3">
+    <input (change)="setChecked(notification)" type="checkbox" [checked]="notification.checked" class="notif-checkbox">
     <span id="notif-type">{{notification.typeRu}}</span>
   </div>
   <div class="col-md-3">
@@ -12,9 +15,9 @@
     <span id="notif-date">{{notification.dateString}}</span>
   </div>
   <div class="col-md-3">
-    <span id="notif-important">{{notification.importance}}</span>
+    <span id="notif-important" *ngIf="notification.important" class="badge badge-danger">Важное</span>
   </div>
-  <div class="col-md-12">
+  <div class="col-md-12" [ngClass]="{notifread: !notification.read}">
     <span id="notif-text">{{notification.text}}</span>
   </div>
 </div>

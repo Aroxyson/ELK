@@ -10,4 +10,6 @@ export class Flags {
   dateFilterStart: moment.Moment;
   dateFilterEnd: moment.Moment;
   important = false;
+  checkAll = false;
+  searchFilter = '';
 }
