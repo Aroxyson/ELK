@@ -35,11 +35,11 @@
     <div class="col-md-2">
     </div>
   </div>
-  <div class="row">
+  <div class="row  px-4">
     <div class="col-md-12 nav-height">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Все</a>
+          <a class="nav-link active" href="#">Все <span class="quantity">{{quantity}}</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Срочные</a>
@@ -62,10 +62,10 @@
       </ul>
     </div>
   </div>
-    <div class="row">
+    <div class="row  px-4">
     <div class="col-md-7">
-      <app-filters (flagsOut)="setFlags($event)" [checkedStatus]="checkedStatus"></app-filters>
-      <app-notifications (checkedStatusOut)="sendCheckedStatus($event)" [flags]="flags"></app-notifications>
+      <app-filters (flagsOut)="setFlags($event)"></app-filters>
+      <app-notifications (quantityOut)="setNotifQuantity($event)" [flags]="flags"></app-notifications>
       <div class="row">
         <div class="col-md-12">
         </div>

@@ -7,6 +7,8 @@ import {RestApiService} from './services/rest-api.service';
 import {HttpClientModule} from '@angular/common/http';
 import { FiltersComponent } from './components/filters/filters.component';
 import {FiltersService} from './services/filters.service';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -16,9 +18,11 @@ import {FiltersService} from './services/filters.service';
   ],
   imports: [
     HttpClientModule,
-    BrowserModule
+    [BrowserModule, InfiniteScrollModule]
   ],
   providers: [RestApiService, FiltersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

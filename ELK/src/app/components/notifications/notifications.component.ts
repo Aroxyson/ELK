@@ -12,12 +12,15 @@ import {dateSortOrder} from '../../core/dateSortOrder';
 })
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
-  @Output() checkedStatusOut: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() quantityOut: EventEmitter<number> = new EventEmitter<number>();
 
   notifications: Notification[] = [];
   notificationsFiltered: Notification[] = [];
+  notificationsView: Notification[] = [];
   queueFunc: Array<any> = [];
   checkedNotifications: Notification[] = [];
+  start = 0;
+  showingNotifications = 10;
 
   constructor(private restApiService: RestApiService, private filterService: FiltersService) {}
 
@@ -77,16 +80,43 @@ export class NotificationsComponent implements OnInit, OnChanges {
     }
 
     queue.run();
+
+    this.notificationsView = this.notificationsFiltered.slice(0, this.showingNotifications);
+    if (this.notificationsView.length < this.showingNotifications) {
+      this.start = this.notificationsFiltered.length;
+    } else {
+      this.start = this.showingNotifications;
+    }
   }
 
-  sendCheckedStatus(checkedStatus: boolean) {
-    this.checkedStatusOut.emit(checkedStatus);
+  onScroll() {
+    console.log(this.start);
+    this.appendItems(this.showingNotifications);
+  }
+
+  appendItems(limit: number) {
+    for (let i = this.start; i < this.start + limit; i++) {
+      if (i >= this.notificationsFiltered.length) {
+        this.start = this.notificationsFiltered.length;
+        return;
+      } else {
+        this.notificationsView.push(this.notificationsFiltered[i]);
+      }
+    }
+    this.start += limit;
+  }
+
+  sendNotifQuantity() {
+    this.quantityOut.emit(this.notifications.length);
   }
 
   initNotifications() {
     this.restApiService.receiveItems().subscribe((notifications) => {
       this.notifications = notifications;
       this.notificationsFiltered = this.notifications;
+      this.sendNotifQuantity();
+      this.start = 0;
+      this.appendItems(this.showingNotifications);
     }, error => {
       console.log(error.message);
     });

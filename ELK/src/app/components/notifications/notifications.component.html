@@ -1,9 +1,10 @@
+
 <div *ngIf="checkedNotifications.length > 0" class="btn-group notif-action-group">
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-archive">Архивировать</button>
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-read">Отметить как прочитанное</button>
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
 </div>
-<div *ngFor="let notification of notificationsFiltered" class="row py-4 border-bottom">
+<div *ngFor="let notification of notificationsView" class="row py-4 border-bottom">
   <div class="col-md-3">
     <input (change)="setChecked(notification)" type="checkbox" [checked]="notification.checked" class="notif-checkbox">
     <span id="notif-type">{{notification.typeRu}}</span>
@@ -21,3 +22,5 @@
     <span id="notif-text">{{notification.text}}</span>
   </div>
 </div>
+<button *ngIf="start < notificationsFiltered.length" class="show-more" (click)="onScroll()">Показать еще</button>
+

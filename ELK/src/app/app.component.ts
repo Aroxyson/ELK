@@ -8,13 +8,13 @@ import {Flags} from './core/flags';
 })
 export class AppComponent {
   flags = new Flags();
-  checkedStatus = false;
+  quantity: number;
 
   setFlags(flagsIn: Flags) {
     this.flags = flagsIn;
   }
 
-  sendCheckedStatus(checked: boolean) {
-    this.checkedStatus = checked;
+  setNotifQuantity(quantity: number) {
+    this.quantity = quantity;
   }
 }
