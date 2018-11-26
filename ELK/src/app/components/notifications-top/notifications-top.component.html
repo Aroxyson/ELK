@@ -1,0 +1,6 @@
+<div class="" >
+      <span *ngFor="let notification of notifications"
+            class="py-4 border-bottom notification dropdown-item"
+            [ngClass]="{notifread: !notification.read}"
+            id="notif-text">{{notification.text}}</span>
+</div>

@@ -1,0 +1,8 @@
+.dropdown-item {
+  white-space: normal !important;
+  min-width:400px;
+}
+
+.icon {
+  background: url("/src/assets/simple-calendar/img/cal.gif");
+}

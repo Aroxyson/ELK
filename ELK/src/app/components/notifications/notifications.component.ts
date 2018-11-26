@@ -12,7 +12,8 @@ import {dateSortOrder} from '../../core/dateSortOrder';
 })
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
-  @Output() quantityOut: EventEmitter<number> = new EventEmitter<number>();
+  // @Output() quantityOut: EventEmitter<number> = new EventEmitter<number>();
+  @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
 
   notifications: Notification[] = [];
   notificationsFiltered: Notification[] = [];
@@ -107,7 +108,8 @@ export class NotificationsComponent implements OnInit, OnChanges {
   }
 
   sendNotifQuantity() {
-    this.quantityOut.emit(this.notifications.length);
+   // this.quantityOut.emit(this.notifications.length);
+    this.notificationsOut.emit(this.notifications);
   }
 
   initNotifications() {

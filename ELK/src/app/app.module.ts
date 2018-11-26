@@ -9,12 +9,14 @@ import { FiltersComponent } from './components/filters/filters.component';
 import {FiltersService} from './services/filters.service';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import { NotificationsTopComponent } from './components/notifications-top/notifications-top.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotificationsComponent,
-    FiltersComponent
+    FiltersComponent,
+    NotificationsTopComponent
   ],
   imports: [
     HttpClientModule,

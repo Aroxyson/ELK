@@ -7,14 +7,19 @@ import {Flags} from './core/flags';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  flags = new Flags();
-  quantity: number;
+  flags: Flags = new Flags();
+  isTopNotifVisible = false;
+  notifications: Notification[] = [];
 
   setFlags(flagsIn: Flags) {
     this.flags = flagsIn;
   }
 
-  setNotifQuantity(quantity: number) {
-    this.quantity = quantity;
+  showTopNotifs() {
+    this.isTopNotifVisible = !this.isTopNotifVisible;
+  }
+
+  setNotifQuantity(notificationsIn: Notification[]) {
+    this.notifications = notificationsIn;
   }
 }

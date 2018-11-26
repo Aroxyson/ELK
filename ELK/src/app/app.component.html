@@ -30,7 +30,10 @@
     </div>
     <div class="col-md-1">
     </div>
-    <div class="col-md-1">
+    <div  class="col-md-1 dropdown">
+      <span class="dropdown-toggle icon"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      </span>
+      <app-notifications-top class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" [notificationsIn]="notifications">!</app-notifications-top>
     </div>
     <div class="col-md-2">
     </div>
@@ -39,7 +42,7 @@
     <div class="col-md-12 nav-height">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Все <span class="quantity">{{quantity}}</span></a>
+          <a class="nav-link active" href="#">Все <span class="quantity">{{notifications.length}}</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Срочные</a>
@@ -65,7 +68,7 @@
     <div class="row  px-4">
     <div class="col-md-7">
       <app-filters (flagsOut)="setFlags($event)"></app-filters>
-      <app-notifications (quantityOut)="setNotifQuantity($event)" [flags]="flags"></app-notifications>
+      <app-notifications (notificationsOut)="setNotifQuantity($event)" [flags]="flags"></app-notifications>
       <div class="row">
         <div class="col-md-12">
         </div>
