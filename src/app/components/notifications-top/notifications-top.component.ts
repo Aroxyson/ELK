@@ -16,7 +16,7 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     const notifLimit = 4;
-    this.notifications = changes.notificationsIn.currentValue.splice(0, notifLimit);
+    this.notifications = changes.notificationsIn.currentValue.slice(0, notifLimit);
   }
 
 }

@@ -8,18 +8,13 @@ import {Flags} from './core/flags';
 })
 export class AppComponent {
   flags: Flags = new Flags();
-  isTopNotifVisible = false;
   notifications: Notification[] = [];
 
   setFlags(flagsIn: Flags) {
     this.flags = flagsIn;
   }
 
-  showTopNotifs() {
-    this.isTopNotifVisible = !this.isTopNotifVisible;
-  }
-
-  setNotifQuantity(notificationsIn: Notification[]) {
+  setNotifications(notificationsIn: Notification[]) {
     this.notifications = notificationsIn;
   }
 }

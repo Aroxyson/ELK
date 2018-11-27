@@ -6,7 +6,7 @@
 </div>
 <div *ngFor="let notification of notificationsView" class="row py-4 border-bottom notification">
   <div class="col-md-3">
-    <input (change)="setChecked(notification)" type="checkbox" [checked]="notification.checked" class="notif-checkbox">
+    <input (change)="setChecked(notification, $event.target.checked)" type="checkbox" [checked]="notification.checked" class="notif-checkbox">
     <span id="notif-type">{{notification.typeRu}}</span>
   </div>
   <div class="col-md-3">
@@ -22,5 +22,6 @@
     <span id="notif-text">{{notification.text}}</span>
   </div>
 </div>
-<button *ngIf="start < notificationsFiltered.length" class="show-more" (click)="onScroll()">Показать еще</button>
+<button *ngIf="start < notificationsFiltered.length" class="show-more" (click)="appendNotifs()">Показать еще</button>
+<span *ngIf="emptyResult" class="alert alert-dark">Отсутствуют уведомления, удовлетворяющие условиям поиска</span>
 

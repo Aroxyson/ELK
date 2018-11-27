@@ -3,7 +3,6 @@ import {RestApiService} from '../../services/rest-api.service';
 import {Notification} from '../../core/notification';
 import {FiltersService} from '../../services/filters.service';
 import {Flags} from '../../core/flags';
-import {dateSortOrder} from '../../core/dateSortOrder';
 
 @Component({
   selector: 'app-notifications',
@@ -12,7 +11,6 @@ import {dateSortOrder} from '../../core/dateSortOrder';
 })
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
-  // @Output() quantityOut: EventEmitter<number> = new EventEmitter<number>();
   @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
 
   notifications: Notification[] = [];
@@ -22,8 +20,10 @@ export class NotificationsComponent implements OnInit, OnChanges {
   checkedNotifications: Notification[] = [];
   start = 0;
   showingNotifications = 10;
+  emptyResult = false;
 
-  constructor(private restApiService: RestApiService, private filterService: FiltersService) {}
+  constructor(private restApiService: RestApiService, private filterService: FiltersService) {
+  }
 
   ngOnInit() {
     this.initNotifications();
@@ -35,13 +35,18 @@ export class NotificationsComponent implements OnInit, OnChanges {
     const queue = new Queue(this.queueFunc);
 
     function Queue(arrayFunc: Array<any>) {
-      this.run = function() {
+      this.run = function () {
         for (let i = 0; i < arrayFunc.length; i++) {
           if (typeof arrayFunc[i] === 'function') {
             arrayFunc[i]();
           }
         }
       };
+    }
+
+    if (previous && this.notifications.length === 0) {
+      alert('Уведомления отсутствуют');
+      return;
     }
 
     if (current.request || current.approval || current.revision) {
@@ -56,19 +61,19 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
     if (current.dateFilterStart && current.dateFilterEnd) {
       this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
+      this.start = 0;
     }
 
     if (current.searchFilter) {
       this.notificationsFiltered = this.filterService.filterByName(this.notificationsFiltered, current.searchFilter);
+      this.start = 0;
     }
 
     if (previous) {
       if (current.checkAll !== previous.checkAll) {
-        this.notificationsFiltered = this.notificationsFiltered.map(notification => {
-          this.setChecked(notification);
-          notification.checked = current.checkAll;
-          return notification;
-        });
+        for(let i = 0; i < this.notificationsView.length; i ++) {
+          this.setChecked(this.notificationsFiltered[i], current.checkAll);
+        }
       }
       if (current.nameSort !== previous.nameSort) {
         this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
@@ -82,20 +87,27 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
     queue.run();
 
-    this.notificationsView = this.notificationsFiltered.slice(0, this.showingNotifications);
-    if (this.notificationsView.length < this.showingNotifications) {
-      this.start = this.notificationsFiltered.length;
-    } else {
-      this.start = this.showingNotifications;
+    if (previous && (this.notificationsFiltered.length === 0)) {
+      if (this.notifications.length > this.showingNotifications) {
+        this.notificationsView = this.notificationsFiltered.slice(0, this.showingNotifications);
+      } else {
+        this.notificationsView = this.notifications;
+      }
+      this.start = this.notificationsView.length;
+      this.emptyResult = true;
+      return;
     }
+
+    if (this.notificationsView.length === 0) {
+        this.notificationsView.length = (this.notificationsFiltered.length < this.showingNotifications)? this.notificationsFiltered.length : this.showingNotifications;
+    }
+
+    this.notificationsView = this.notificationsFiltered.slice(0, this.notificationsView.length);
+    this.start = this.notificationsView.length;
+    this.emptyResult = false;
   }
 
-  onScroll() {
-    console.log(this.start);
-    this.appendItems(this.showingNotifications);
-  }
-
-  appendItems(limit: number) {
+  appendNotifs(limit: number) {
     for (let i = this.start; i < this.start + limit; i++) {
       if (i >= this.notificationsFiltered.length) {
         this.start = this.notificationsFiltered.length;
@@ -107,8 +119,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
     this.start += limit;
   }
 
-  sendNotifQuantity() {
-   // this.quantityOut.emit(this.notifications.length);
+  sendNotifications() {
     this.notificationsOut.emit(this.notifications);
   }
 
@@ -116,9 +127,9 @@ export class NotificationsComponent implements OnInit, OnChanges {
     this.restApiService.receiveItems().subscribe((notifications) => {
       this.notifications = notifications;
       this.notificationsFiltered = this.notifications;
-      this.sendNotifQuantity();
+      this.sendNotifications();
       this.start = 0;
-      this.appendItems(this.showingNotifications);
+      this.appendNotifs(this.showingNotifications);
     }, error => {
       console.log(error.message);
     });
@@ -135,11 +146,11 @@ export class NotificationsComponent implements OnInit, OnChanges {
   }
 
   dateSort(current: Flags) {
-      this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, current);
+    this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, current);
   }
 
-  setChecked(notification: Notification) {
-    notification.checked = !notification.checked;
+  setChecked(notification: Notification, checkedStatus: boolean) {
+    notification.checked = checkedStatus;
     if (notification.checked) {
       this.checkedNotifications.push(notification);
     } else {
@@ -159,7 +170,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
         // });
         break;
       case 'as-read':
-        this.notificationsFiltered = this.notificationsFiltered.map(notification => {
+        this.notifications = this.notificationsFiltered.map(notification => {
           if (notification.checked) {
             notification.read = true;
           }
@@ -167,7 +178,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
         });
         break;
       case 'as-important':
-        this.notificationsFiltered = this.notificationsFiltered.map(notification => {
+        this.notifications = this.notificationsFiltered.map(notification => {
           if (notification.checked) {
             notification.important = true;
           }
