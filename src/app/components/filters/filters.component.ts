@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
@@ -18,15 +18,11 @@ export class FiltersComponent implements OnInit {
   tempDateStart: moment.Moment;
   tempDateEnd: moment.Moment;
 
-  constructor(private filterService: FiltersService) {}
+  constructor() {}
 
   ngOnInit() {
     this.flags = new Flags();
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.checkedStatus.currentValue =)
-  // }
 
   emitChanges() {
     this.flagsOut.emit(Object.assign({}, this.flags));
