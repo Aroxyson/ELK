@@ -1,6 +1,8 @@
-<div>
-      <span *ngFor="let notification of notifications"
+<span class="icon" id="show-top-notifs"></span>
+<div id="top-notifications" class="top-notif" [style.display]="visibility==true?'block':'none'">
+      <span id="test" *ngFor="let notification of notifications"
             class="py-4 border-bottom notification dropdown-item"
             [ngClass]="{notifread: !notification.read}"
-            id="notif-text">{{notification.text}}</span>
+            >{{notification.text}}
+      </span>
 </div>

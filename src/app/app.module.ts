@@ -26,5 +26,3 @@ import { NotificationsTopComponent } from './components/notifications-top/notifi
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);

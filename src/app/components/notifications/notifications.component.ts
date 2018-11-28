@@ -108,6 +108,8 @@ export class NotificationsComponent implements OnInit, OnChanges {
   }
 
   appendNotifs(limit: number) {
+    console.log(this.start);
+    console.log(this.notificationsFiltered);
     for (let i = this.start; i < this.start + limit; i++) {
       if (i >= this.notificationsFiltered.length) {
         this.start = this.notificationsFiltered.length;

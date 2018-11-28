@@ -2,3 +2,26 @@
   white-space: normal !important;
   min-width:400px;
 }
+
+.icon {
+  display: block;
+  cursor: pointer;
+  border: 0;
+  background: url("//assets/bell.png") 50% 50% no-repeat;
+  background-size: contain;
+  height: 100%;
+  width: 100%;
+}
+
+.top-notif{
+  display: none;
+  z-index: 1000;
+  top: 60px !important;
+  background-color: #fff;
+  font-size: small;
+  max-width: 400px;
+  -webkit-box-shadow: 0px 4px 10px -1px #d9d9d9;
+  -moz-box-shadow: 0px 4px 10px -1px #d9d9d9;
+  box-shadow: 0px 4px 10px -1px #d9d9d9;
+  position: absolute;
+}
