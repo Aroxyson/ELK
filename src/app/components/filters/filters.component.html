@@ -32,17 +32,15 @@
         Дата
       </span>
       <div (click)="stopPropagation($event)" id="dateDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <label (click)="addDateSort($event.target)" for="newToOld"><a class="dropdown-item"><input name="date" type="radio" id="newToOld">От новых к старым</a></label>
-        <label (click)="addDateSort($event.target)" for="oldToNew"><a class="dropdown-item"><input name="date" type="radio" id="oldToNew">От старых к новым</a></label>
-        <label (click)="enableInput()" for="dateFilter">
-          <a class="dropdown-item">
+        <label (click)="addDateSort($event.target)" for="newToOld" class="dropdown-item"><input name="date" type="radio" id="newToOld">От новых к старым</label>
+        <label (click)="addDateSort($event.target)" for="oldToNew" class="dropdown-item"><input name="date" type="radio" id="oldToNew">От старых к новым</label>
+        <label (click)="enableInput()" for="dateFilter" class="dropdown-item">
             <input name="date" type="radio" id="dateFilter">За период времени
             <input (input)="validateDate($event)" id="startDate" type="text" name="date" class="tcal form-control" value="" placeholder="Начало периода" disabled/>
             <div class="invalid-feedback" style="visibility: hidden"></div>
             <br>
             <input (input)="validateDate($event)" id="endDate" type="text" name="date" class="tcal form-control" value="" placeholder="Конец периода" disabled/>
             <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div>
-          </a>
         </label>
       </div>
     </div>

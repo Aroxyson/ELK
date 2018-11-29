@@ -15,8 +15,9 @@
 }
 
 .quantity{
-  font-size: small;
+  font-size: .8em;
   color: #747474;
+  font-weight: normal;
 }
 
 .dropdown-top {
@@ -100,4 +101,24 @@
   outline: none;
 }
 
-
+.close {
+  position: relative;
+  width: 8px;
+  opacity: 0.3;
+}
+.close:hover {
+  opacity: 1;
+}
+.close:before, .close:after {
+  position: absolute;
+  content: ' ';
+  height: 16px;
+  width: 1px;
+  background-color: #333;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}

@@ -1,8 +1,9 @@
-<span class="icon" id="show-top-notifs"></span>
+<span class="icon" id="show-top-notifs"><span class="badge">{{notificationsIn.length}}</span></span>
 <div id="top-notifications" class="top-notif" [style.display]="visibility==true?'block':'none'">
-      <span id="test" *ngFor="let notification of notifications"
-            class="py-4 border-bottom notification dropdown-item"
-            [ngClass]="{notifread: !notification.read}"
-            >{{notification.text}}
-      </span>
+  <span *ngFor="let notification of notificationsView"
+          class="border-bottom top-notification notification">
+    <span class="quantity py-1">{{notification.dateString}}</span>
+    <span (click)="deleteNotification(notification)" class="close"></span>
+    <span>{{notification.text}}</span>
+  </span>
 </div>

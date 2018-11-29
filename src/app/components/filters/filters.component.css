@@ -1,0 +1,11 @@
+.dropdown-menu {
+  width: 300px;
+}
+
+.dropdown-item input {
+  margin-right: 5px;
+}
+
+.dropdown-item label {
+  width: 100%;
+}
