@@ -31,7 +31,7 @@
     <div class="col-md-1">
     </div>
     <div  class="col-md-1">
-      <app-notifications-top [notificationsIn]="notifications"></app-notifications-top>
+      <app-notifications-top [notificationsIn]="notificationsTop" (notificationsOutTop)="setNotifications($event)"></app-notifications-top>
     </div>
     <div class="col-md-2">
     </div>
@@ -66,7 +66,7 @@
     <div class="row  px-4">
     <div class="col-md-7">
       <app-filters (flagsOut)="setFlags($event)"></app-filters>
-      <app-notifications (notificationsOut)="setNotifications($event)" [flags]="flags"></app-notifications>
+      <app-notifications (notificationsOut)="setNotificationsTop($event)" [notificationsIn]="notifications" [flags]="flags"></app-notifications>
       <div class="row">
         <div class="col-md-12">
         </div>

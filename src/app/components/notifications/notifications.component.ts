@@ -11,6 +11,7 @@ import {Flags} from '../../core/flags';
 })
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
+  @Input() notificationsIn: Notification[];
   @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
 
   notifications: Notification[] = [];
@@ -30,8 +31,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const current = changes.flags.currentValue;
-    const previous = changes.flags.previousValue;
+    console.log('sdfsdf');
     const queue = new Queue(this.queueFunc);
 
     function Queue(arrayFunc: Array<any>) {
@@ -44,58 +44,63 @@ export class NotificationsComponent implements OnInit, OnChanges {
       };
     }
 
-    if (previous && this.notifications.length === 0) {
-      alert('Уведомления отсутствуют');
-      return;
-    }
+    // if (changes.flags && this.notifications.length === 0) {
+    //   alert('Уведомления отсутствуют');
+    //   return;
+    // }
 
-    if (current.request || current.approval || current.revision) {
-      this.notificationsFiltered = this.filterService.filterByType(this.notifications, current);
-    } else {
-      this.notificationsFiltered = this.notifications;
-    }
+    if (changes.flags) {
+      const current = changes.flags.currentValue;
+      const previous = changes.flags.previousValue;
 
-    if (current.important) {
-      this.notificationsFiltered = this.filterService.filterByImportance(this.notificationsFiltered, current);
-    }
+      if (current.request || current.approval || current.revision) {
+        this.notificationsFiltered = this.filterService.filterByType(this.notifications, current);
+      } else {
+        this.notificationsFiltered = this.notifications;
+      }
 
-    if (current.dateFilterStart && current.dateFilterEnd) {
-      this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
-      this.start = 0;
-    }
+      if (current.important) {
+        this.notificationsFiltered = this.filterService.filterByImportance(this.notificationsFiltered, current);
+      }
 
-    if (current.searchFilter) {
-      this.notificationsFiltered = this.filterService.filterByName(this.notificationsFiltered, current.searchFilter);
-      this.start = 0;
-    }
+      if (current.dateFilterStart && current.dateFilterEnd) {
+        this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
+        this.start = 0;
+      }
 
-    if (previous) {
-      if (current.checkAll !== previous.checkAll) {
-        for(let i = 0; i < this.notificationsView.length; i ++) {
-          this.setChecked(this.notificationsFiltered[i], current.checkAll);
+      if (current.searchFilter) {
+        this.notificationsFiltered = this.filterService.filterByName(this.notificationsFiltered, current.searchFilter);
+        this.start = 0;
+      }
+
+      if (previous) {
+        if (current.checkAll !== previous.checkAll) {
+          for (let i = 0; i < this.notificationsView.length; i++) {
+            this.setChecked(this.notificationsFiltered[i], current.checkAll);
+          }
+        }
+        if (current.nameSort !== previous.nameSort) {
+          this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
+          this.queueFunc.push(this.nameSort(previous, current));
+        }
+        if (current.dateSortOrder !== previous.dateSortOrder) {
+          this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
+          this.queueFunc.push(this.dateSort(current));
         }
       }
-      if (current.nameSort !== previous.nameSort) {
-        this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
-        this.queueFunc.push(this.nameSort(previous, current));
-      }
-      if (current.dateSortOrder !== previous.dateSortOrder) {
-        this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
-        this.queueFunc.push(this.dateSort(current));
-      }
-    }
 
-    queue.run();
+      queue.run();
 
-    if (previous && (this.notificationsFiltered.length === 0)) {
-      if (this.notifications.length > this.showingNotifications) {
-        this.notificationsView = this.notificationsFiltered.slice(0, this.showingNotifications);
-      } else {
-        this.notificationsView = this.notifications;
+      if (previous && (this.notificationsFiltered.length === 0)) {
+        if (this.notifications.length > this.showingNotifications) {
+          this.notificationsView = this.notificationsFiltered.slice(0, this.showingNotifications);
+        } else {
+          this.notificationsView = this.notifications;
+        }
+        this.start = this.notificationsView.length;
+        this.emptyResult = true;
+        return;
       }
-      this.start = this.notificationsView.length;
-      this.emptyResult = true;
-      return;
     }
 
     if (this.notificationsView.length === 0) {

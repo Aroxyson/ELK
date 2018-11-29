@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 
 @Component({
   host: {'(document:click)':'showNotifications($event.target)'},
@@ -8,6 +8,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 })
 export class NotificationsTopComponent implements OnInit, OnChanges {
   @Input() notificationsIn: Notification[];
+  @Output() notificationsOutTop: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
   notifications: Notification[] = [];
   notificationsView: Notification[] = [];
   visibility = false;
@@ -18,8 +19,7 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const notifLimit = 4;
-    console.log(changes.notificationsIn.currentValue);
+    console.log('changes Top', changes);
     this.notifications = changes.notificationsIn.currentValue;
     this.notificationsView = this.notifications.slice(0, 4);
   }
@@ -45,5 +45,7 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
   deleteNotification(notification: Notification) {
     this.notifications.splice(this.notifications.indexOf(notification),1);
     this.notificationsView = this.notifications.slice(0, 4);
+    this.notificationsOutTop.emit(this.notifications);
+    console.log('this.notificationsOut', this.notificationsOutTop);
   }
 }

@@ -9,6 +9,7 @@ import {Flags} from './core/flags';
 export class AppComponent {
   flags: Flags = new Flags();
   notifications: Notification[] = [];
+  notificationsTop: Notification[] = [];
 
   setFlags(flagsIn: Flags) {
     this.flags = flagsIn;
@@ -16,5 +17,8 @@ export class AppComponent {
 
   setNotifications(notificationsIn: Notification[]) {
     this.notifications = notificationsIn;
+  }
+  setNotificationsTop(notificationsIn: Notification[]) {
+    this.notificationsTop = notificationsIn;
   }
 }
