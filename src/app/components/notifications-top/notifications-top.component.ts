@@ -19,8 +19,8 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('changes Top', changes);
     this.notifications = changes.notificationsIn.currentValue;
+    console.log('changes Top', this.notifications);
     this.notificationsView = this.notifications.slice(0, 4);
   }
 
@@ -28,14 +28,14 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
     const topNotifications = document.getElementById('top-notifications');
     const showTopNotifications = document.getElementById('show-top-notifs');
 
-    if (this.visibility === false) {
+    if (!this.visibility) {
       if (showTopNotifications.contains(target)) {
         this.visibility = true;
         return;
       }
     }
-    if (this.visibility === true) {
-      if (!topNotifications.contains(target)){
+    if (this.visibility) {
+      if (!topNotifications.contains(target) && (!target.classList.contains('close-top-notif'))) {
         this.visibility = false;
         return;
       }
@@ -46,6 +46,5 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
     this.notifications.splice(this.notifications.indexOf(notification),1);
     this.notificationsView = this.notifications.slice(0, 4);
     this.notificationsOutTop.emit(this.notifications);
-    console.log('this.notificationsOut', this.notificationsOutTop);
   }
 }

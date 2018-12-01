@@ -1,7 +1,6 @@
 .header {
   height: 60px;
   background-color: #003399;
-  width: 100%;
 }
 
 .nav-height {
@@ -14,7 +13,7 @@
   font-weight: bold;
 }
 
-.quantity{
+.small-text{
   font-size: .8em;
   color: #747474;
   font-weight: normal;
@@ -99,26 +98,4 @@
   text-decoration: none;
   background-color: #003399;
   outline: none;
-}
-
-.close {
-  position: relative;
-  width: 8px;
-  opacity: 0.3;
-}
-.close:hover {
-  opacity: 1;
-}
-.close:before, .close:after {
-  position: absolute;
-  content: ' ';
-  height: 16px;
-  width: 1px;
-  background-color: #333;
-}
-.close:before {
-  transform: rotate(45deg);
-}
-.close:after {
-  transform: rotate(-45deg);
 }

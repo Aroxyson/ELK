@@ -9,6 +9,7 @@ export class Notification {
   text = '';
   checked = false;
   read = false;
+  archive = false;
 
   constructor(json_item?: any) {
     const options = {

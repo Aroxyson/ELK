@@ -28,7 +28,6 @@ export class FiltersComponent implements OnInit {
     this.flagsOut.emit(Object.assign({}, this.flags));
   }
   addToFlags(input: HTMLInputElement) {
-    console.dir(input);
     switch (input.id) {
       case 'request':
         this.flags.request = input.checked;

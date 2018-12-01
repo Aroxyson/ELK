@@ -40,7 +40,7 @@
     <div class="col-md-12 nav-height">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Все <span class="quantity">{{notifications.length}}</span></a>
+          <a class="nav-link active" href="#">Все <span class="small-text">{{length}}</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Срочные</a>
@@ -64,9 +64,11 @@
     </div>
   </div>
     <div class="row  px-4">
-    <div class="col-md-7">
+    <div class="col-md-8">
       <app-filters (flagsOut)="setFlags($event)"></app-filters>
-      <app-notifications (notificationsOut)="setNotificationsTop($event)" [notificationsIn]="notifications" [flags]="flags"></app-notifications>
+      <app-notifications (notificationsOut)="setNotificationsTop($event)"
+                         [notificationsIn]="notifications"
+                         [flags]="flags"></app-notifications>
       <div class="row">
         <div class="col-md-12">
         </div>

@@ -1,27 +1,69 @@
-
 <div *ngIf="checkedNotifications.length > 0" class="btn-group notif-action-group">
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-archive">Архивировать</button>
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-read">Отметить как прочитанное</button>
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
 </div>
-<div *ngFor="let notification of notificationsView" class="row py-4 border-bottom notification">
+<div *ngFor="let notification of notificationsView"
+     (click)="setPopupData(notification)"
+     class="row py-3 border-bottom notification"
+     data-toggle="modal" data-target=".bd-example-modal-lg">
   <div class="col-md-3">
     <input (change)="setChecked(notification, $event.target.checked)" type="checkbox" [checked]="notification.checked" class="notif-checkbox">
-    <span id="notif-type">{{notification.typeRu}}</span>
+    <span class="small-text">{{notification.typeRu}}</span>
   </div>
   <div class="col-md-3">
-    <span id="notif-name">{{notification.name}}</span>
+    <span class="small-text">{{notification.name}}</span>
   </div>
-  <div class="col-md-2">
-    <span id="notif-date">{{notification.dateString}}</span>
+  <div class="col-md-3">
+    <span class="small-text">{{notification.dateString}}</span>
   </div>
   <div class="col-md-3">
     <span id="notif-important" *ngIf="notification.important" class="badge badge-danger">Важное</span>
   </div>
-  <div class="col-md-12" [ngClass]="{notifread: !notification.read}">
+  <div class="col-md-12 pt-2" [ngClass]="{notifread: !notification.read}">
     <span id="notif-text">{{notification.text}}</span>
   </div>
 </div>
-<button *ngIf="start < notificationsFiltered.length" class="show-more" (click)="appendNotifs(10)">Показать еще</button>
-<span *ngIf="emptyResult" class="alert alert-dark">Отсутствуют уведомления, удовлетворяющие условиям поиска</span>
 
+<button *ngIf="start < notificationsFiltered.length" class="show-more" (click)="appendToView(10)">Показать еще</button>
+
+<div class="no-results">
+  <span *ngIf="emptyResult">Отсутствуют уведомления, удовлетворяющие условиям поиска
+  </span>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="btn-group notif-action-group">
+          <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action" id="as-archive-popup">Архивировать</button>
+          <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action" id="as-read-popup">Отметить как непрочитанное</button>
+          <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action" id="as-important-popup">Отметить как неважное</button>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="row py-4 text-center">
+          <div class="col-md-3">
+            <span class="small-text">{{notificationPopup.typeRu}}</span>
+          </div>
+          <div class="col-md-3">
+            <span class="small-text">{{notificationPopup.name}}</span>
+          </div>
+          <div class="col-md-3">
+            <span class="small-text">{{notificationPopup.dateString}}</span>
+          </div>
+          <div class="col-md-3">
+          <span *ngIf="notificationPopup.important" class="badge badge-danger">Важное</span>
+          </div>
+        </div>
+        <div class="row py-2">
+          <div class="col-md-12">
+          <span>{{notificationPopup.text}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
