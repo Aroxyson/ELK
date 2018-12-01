@@ -2,10 +2,25 @@
   width: 300px;
 }
 
+.dropdown-item {
+  padding: 0.5rem 1rem;
+}
+
 .dropdown-item input {
   margin-right: 5px;
 }
 
 .dropdown-item label {
   width: 100%;
+}
+
+.dropdown-item:active {
+  background-color: #9caac0 !important;
+}
+.dropdown-item:hover {
+  background-color: #e8ecf4;
+}
+
+label {
+  margin:0;
 }

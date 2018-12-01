@@ -10,8 +10,8 @@
 
 /* input box in default state */
 .tcalInput {
-	background: url('img/cal.gif') 100% 50% no-repeat;
-    background-size: contain;
+	background: url('img/cal.gif') 98% 50% no-repeat;
+  background-size: auto 70%;
 	padding-right: 20px;
 	cursor: pointer;
 }
@@ -25,7 +25,6 @@
   z-index: 2000 !important;
 	position: absolute;
 	visibility: hidden;
-	z-index: 100;
 	width: 170px;
 	background-color: white;
 	margin-top: 2px;

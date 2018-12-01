@@ -99,3 +99,57 @@
   background-color: #003399;
   outline: none;
 }
+
+.checkbox,
+.radio {
+  display: none;
+}
+/* Задаем внешний вид для нашего кастомного чекбокса. Все обязательные свойства прокомментированы, остальные же свойства меняйте по вашему усмотрению */
+.checkbox-custom,
+.radio-custom {
+  position: relative;      /* Обязательно задаем, чтобы мы могли абсолютным образом позиционировать псевдоэлемент внютри нашего кастомного чекбокса */
+  width: 20px;             /* Обязательно задаем ширину */
+  height: 20px;            /* Обязательно задаем высоту */
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  margin-right: 5px;
+}
+
+.checkbox-custom-black {
+  position: relative;      /* Обязательно задаем, чтобы мы могли абсолютным образом позиционировать псевдоэлемент внютри нашего кастомного чекбокса */
+  width: 20px;             /* Обязательно задаем ширину */
+  height: 20px;            /* Обязательно задаем высоту */
+  border: 2px solid #000;
+  border-radius: 2px;
+}
+/* Кастомный чекбокс и лейбл центрируем по вертикали. Если вам это не требуется, то вы можете убрать свойство vertical-align: middle из данного правила, но свойство display: inline-block обязательно должно быть */
+.checkbox-custom,
+.radio-custom,
+.label {
+  display: inline-block;
+  vertical-align: middle;
+}
+/* Если реальный чекбокс у нас отмечен, то тогда добавляем данный признак и к нашему кастомному чекбоксу  */
+.checkbox:checked + .checkbox-custom::before,
+.radio:checked + .radio-custom::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  bottom: 3px;
+  left: 3px;
+  background: #9caac0;
+  border-radius: 1px;
+}
+
+.radio-custom,
+.radio:checked + .radio-custom::before {
+  border-radius: 50%;
+}
+
+.dropdown-menu {
+  border-radius: 0;
+  border: 0;
+  box-shadow: 0px 4px 15px -1px #d9d9d9;
+}

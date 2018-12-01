@@ -12,6 +12,7 @@ import {Flags} from '../../core/flags';
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
   @Input() notificationsIn: Notification[];
+  @Input() removedNotification: Notification;
   @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
 
   notifications: Notification[] = [];
@@ -34,6 +35,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     const current = changes.flags ? changes.flags.currentValue : this.flags;
     const previous = changes.flags ? changes.flags.previousValue : this.flags;
+    const removedNotification = changes.removedNotification ? changes.removedNotification.currentValue : undefined;
     const queue = new Queue(this.queueFunc);
 
     function Queue(arrayFunc: Array<any>) {
@@ -50,6 +52,9 @@ export class NotificationsComponent implements OnInit, OnChanges {
     //   alert('Уведомления отсутствуют');
     //   return;
     // }
+    if (removedNotification) {
+      this.checkedNotifications.splice(this.checkedNotifications.indexOf(removedNotification), 1);
+    }
 
     if (current.request || current.approval || current.revision) {
       this.notificationsFiltered = this.filterService.filterByType(this.notifications, current);
@@ -121,7 +126,13 @@ export class NotificationsComponent implements OnInit, OnChanges {
     this.start += limit;
   }
 
-  setPopupData(notification: Notification) {
+  setPopupData(event: Event, notification: Notification) {
+    const element = <HTMLElement> event.target;
+    if (element.classList.contains('notif-checkbox')) {
+      console.dir(element);
+      event.stopPropagation();
+      return;
+    }
     this.notificationPopup = notification;
     notification.read = true;
   }

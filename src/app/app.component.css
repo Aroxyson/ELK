@@ -1,0 +1,18 @@
+.form-control {
+  background-color: #1d5cd7 !important;
+  color: #fff;
+  border: 0px;
+  padding-right: 25px;
+}
+
+.icon-search-white {
+  background: url(../assets/search.png) 98% 50% no-repeat;
+  background-size: auto 50%;
+}
+
+input::-webkit-input-placeholder {
+  color: #fff;
+}
+input:-moz-placeholder {
+  color: #fff;
+}

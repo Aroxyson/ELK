@@ -26,12 +26,16 @@
       </nav>
     </div>
     <div class="col-md-2 my-auto">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <input class="form-control mr-sm-2 icon-search-white" type="search" placeholder="Поиск" aria-label="Search">
     </div>
     <div class="col-md-1">
     </div>
     <div  class="col-md-1">
-      <app-notifications-top [notificationsIn]="notificationsTop" (notificationsOutTop)="setNotifications($event)"></app-notifications-top>
+      <app-notifications-top
+        [notificationsIn]="notificationsTop"
+        (notificationsOutTop)="setNotifications($event)"
+        (removedNotification)="setRemovedNotification($event)"
+      ></app-notifications-top>
     </div>
     <div class="col-md-2">
     </div>
@@ -41,12 +45,6 @@
       <ul class="nav">
         <li class="nav-item">
           <a class="nav-link active" href="#">Все <span class="small-text">{{length}}</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Срочные</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Нужно согласование</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Задачи на исполнение</a>
@@ -66,9 +64,11 @@
     <div class="row  px-4">
     <div class="col-md-8">
       <app-filters (flagsOut)="setFlags($event)"></app-filters>
-      <app-notifications (notificationsOut)="setNotificationsTop($event)"
-                         [notificationsIn]="notifications"
-                         [flags]="flags"></app-notifications>
+      <app-notifications
+        (notificationsOut)="setNotificationsTop($event)"
+        [notificationsIn]="notifications"
+        [flags]="flags"
+        [removedNotification]="removedNotification"></app-notifications>
       <div class="row">
         <div class="col-md-12">
         </div>

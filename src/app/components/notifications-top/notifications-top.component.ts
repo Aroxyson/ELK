@@ -9,6 +9,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 export class NotificationsTopComponent implements OnInit, OnChanges {
   @Input() notificationsIn: Notification[];
   @Output() notificationsOutTop: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
+  @Output() removedNotification: EventEmitter<Notification> = new EventEmitter<Notification>();
   notifications: Notification[] = [];
   notificationsView: Notification[] = [];
   visibility = false;
@@ -20,7 +21,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.notifications = changes.notificationsIn.currentValue;
-    console.log('changes Top', this.notifications);
     this.notificationsView = this.notifications.slice(0, 4);
   }
 
@@ -46,5 +46,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
     this.notifications.splice(this.notifications.indexOf(notification),1);
     this.notificationsView = this.notifications.slice(0, 4);
     this.notificationsOutTop.emit(this.notifications);
+    this.removedNotification.emit(notification);
   }
 }

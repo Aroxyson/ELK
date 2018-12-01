@@ -4,11 +4,17 @@
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
 </div>
 <div *ngFor="let notification of notificationsView"
-     (click)="setPopupData(notification)"
+     (click)="setPopupData($event, notification)"
      class="row py-3 border-bottom notification"
      data-toggle="modal" data-target=".bd-example-modal-lg">
   <div class="col-md-3">
-    <input (change)="setChecked(notification, $event.target.checked)" type="checkbox" [checked]="notification.checked" class="notif-checkbox">
+    <label class="notif-checkbox">
+      <input
+        (change)="setChecked(notification, $event.target.checked)"
+        [checked]="notification.checked"
+        class="checkbox notif-checkbox" type="checkbox" name="checkbox-test">
+      <span class="checkbox-custom notif-checkbox"></span>
+    </label>
     <span class="small-text">{{notification.typeRu}}</span>
   </div>
   <div class="col-md-3">
