@@ -7,4 +7,9 @@
 .no-results {
   text-align: center;
   padding: 1rem 1rem;
+  margin-bottom: 700px;
+}
+
+.notification-text {
+  white-space: pre-wrap
 }

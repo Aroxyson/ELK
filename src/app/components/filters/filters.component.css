@@ -24,3 +24,9 @@
 label {
   margin:0;
 }
+
+.icon-search-black {
+  background: url(/assets/search-black.png) 98% 50% no-repeat;
+  background-size: auto 50%;
+  padding-right: 30px;
+}

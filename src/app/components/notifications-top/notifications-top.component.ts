@@ -11,7 +11,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
   @Output() notificationsOutTop: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
   @Output() removedNotification: EventEmitter<Notification> = new EventEmitter<Notification>();
   notifications: Notification[] = [];
-  notificationsView: Notification[] = [];
   visibility = false;
 
   constructor() { }
@@ -21,7 +20,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.notifications = changes.notificationsIn.currentValue;
-    this.notificationsView = this.notifications.slice(0, 4);
   }
 
   showNotifications(target: HTMLElement) {
@@ -44,7 +42,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
 
   deleteNotification(notification: Notification) {
     this.notifications.splice(this.notifications.indexOf(notification),1);
-    this.notificationsView = this.notifications.slice(0, 4);
     this.notificationsOutTop.emit(this.notifications);
     this.removedNotification.emit(notification);
   }

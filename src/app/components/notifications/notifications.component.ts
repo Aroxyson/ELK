@@ -21,8 +21,8 @@ export class NotificationsComponent implements OnInit, OnChanges {
   notificationPopup: Notification = new Notification();
   checkedNotifications: Notification[] = [];
   queueFunc: Array<any> = [];
-  start = 0;
-  showingNotifications = 10;
+  viewLimit: number = 0;
+  showingNotifications: number = 10;
   emptyResult = false;
 
   constructor(private restApiService: RestApiService, private filterService: FiltersService) {
@@ -52,6 +52,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
     //   alert('Уведомления отсутствуют');
     //   return;
     // }
+
     if (removedNotification) {
       this.checkedNotifications.splice(this.checkedNotifications.indexOf(removedNotification), 1);
     }
@@ -68,18 +69,25 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
     if (current.dateFilterStart && current.dateFilterEnd) {
       this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
-      this.start = 0;
     }
 
     if (current.searchFilter) {
       this.notificationsFiltered = this.filterService.filterByName(this.notificationsFiltered, current.searchFilter);
-      this.start = 0;
     }
 
     if (previous) {
       if (current.checkAll !== previous.checkAll) {
-        for (let i = 0; i < this.notificationsView.length; i++) {
-          this.setChecked(this.notificationsFiltered[i], current.checkAll);
+        if (current.checkAll === false) {
+          this.notifications.map(notification => {
+            notification.checked = false;
+            this.checkedNotifications = [];
+          });
+        }
+        if (current.checkAll === true) {
+          let limit = this.notificationsFiltered.length < this.viewLimit ? this.notificationsFiltered.length : this.viewLimit;
+          for (let i = 0; i < limit; i++) {
+            this.setChecked(this.notificationsFiltered[i], true);
+          }
         }
       }
       if (current.nameSort !== previous.nameSort) {
@@ -90,46 +98,24 @@ export class NotificationsComponent implements OnInit, OnChanges {
         this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
         this.queueFunc.push(this.dateSort(current));
       }
+
+      this.emptyResult = this.notificationsFiltered.length <= 0;
     }
 
     queue.run();
 
-    if (previous && (this.notificationsFiltered.length === 0)) {
-      if (this.notifications.length > this.showingNotifications) {
-        this.notificationsView = this.notificationsFiltered.slice(0, this.showingNotifications);
-      } else {
-        this.notificationsView = this.notifications;
-      }
-      this.start = this.notificationsView.length;
-      this.emptyResult = true;
-      return;
-    }
-
-    if (this.notificationsView.length === 0) {
-        this.notificationsView.length = (this.notificationsFiltered.length < this.showingNotifications)? this.notificationsFiltered.length : this.showingNotifications;
-    }
-
-    this.notificationsView = this.notificationsFiltered.slice(0, this.notificationsView.length);
-    this.start = this.notificationsView.length;
-    this.emptyResult = false;
+    console.log('this.viewLimit', this.viewLimit);
+    console.log('this.notificationsFiltered', this.notificationsFiltered);
   }
 
-  appendToView(limit: number) {
-    for (let i = this.start; i < this.start + limit; i++) {
-      if (i >= this.notificationsFiltered.length) {
-        this.start = this.notificationsFiltered.length;
-        return;
-      } else {
-        this.notificationsView.push(this.notificationsFiltered[i]);
-      }
-    }
-    this.start += limit;
+  appendToView(incLimit: number) {
+    this.viewLimit += incLimit;
+    this.viewLimit = this.viewLimit > this.notificationsFiltered.length ? this.notificationsFiltered.length : this.viewLimit;
   }
 
   setPopupData(event: Event, notification: Notification) {
     const element = <HTMLElement> event.target;
     if (element.classList.contains('notif-checkbox')) {
-      console.dir(element);
       event.stopPropagation();
       return;
     }
@@ -155,7 +141,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
       this.notifications = notifications;
       this.notificationsFiltered = this.notifications;
       this.sendNotifications();
-      this.start = 0;
+      this.viewLimit = 0;
       this.appendToView(this.showingNotifications);
     }, error => {
       console.log(error.message);

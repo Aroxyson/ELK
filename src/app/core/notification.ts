@@ -7,9 +7,19 @@ export class Notification {
   important = false;
   importanceRu = '';
   text = '';
+  textPreview = '';
   checked = false;
   read = false;
   archive = false;
+
+  trimToWord(string: string, count:number){
+    if(string.length>count){
+      const a=string.substring(0,count);
+      return a.substring(0,Math.max(a.lastIndexOf(' '),a.lastIndexOf(',')-1));
+    } else {
+      return string;
+    }
+  };
 
   constructor(json_item?: any) {
     const options = {
@@ -42,5 +52,6 @@ export class Notification {
     this.date = new Date(Date.parse(json_item.date));
     this.dateString = this.date.getHours() + ':' + this.date.getMinutes() + ' ' + this.date.toLocaleDateString('ru', options);
     this.text = json_item.text;
+    this.textPreview = this.trimToWord(this.text, 150) + '...';
   }
 }

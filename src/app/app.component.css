@@ -2,12 +2,12 @@
   background-color: #1d5cd7 !important;
   color: #fff;
   border: 0px;
-  padding-right: 25px;
 }
 
 .icon-search-white {
   background: url(../assets/search.png) 98% 50% no-repeat;
   background-size: auto 50%;
+  padding-right: 30px;
 }
 
 input::-webkit-input-placeholder {
@@ -15,4 +15,42 @@ input::-webkit-input-placeholder {
 }
 input:-moz-placeholder {
   color: #fff;
+}
+
+.ru-language {
+  padding: .4em .4em;
+  width: 61px;
+  border: 2px solid #002673;
+  height: 33px;
+  border-radius: 5px 0 0 5px;
+  border-right: 0px;
+  color: white;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+.en-language {
+  padding: .4em .4em;
+  width: 61px;
+  border: 2px solid #002673;
+  height: 33px;
+  border-radius: 0 5px 5px 0;
+  border-left: 0px;
+  color: white;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+.chosen-lang {
+  background-color: #002775;
+  color: #dad9da;
+}
+
+.avatar {
+  background: url(../assets/avatar.jpg) no-repeat;
+  background-size: 40px;
+  height: 40px;
+  width: 40px;
+  display: block;
+  border-radius: 1000px;
 }

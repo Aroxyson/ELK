@@ -3,7 +3,8 @@
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-read">Отметить как прочитанное</button>
   <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
 </div>
-<div *ngFor="let notification of notificationsView"
+
+<div *ngFor="let notification of notificationsFiltered | slice:0:viewLimit"
      (click)="setPopupData($event, notification)"
      class="row py-3 border-bottom notification"
      data-toggle="modal" data-target=".bd-example-modal-lg">
@@ -27,14 +28,14 @@
     <span id="notif-important" *ngIf="notification.important" class="badge badge-danger">Важное</span>
   </div>
   <div class="col-md-12 pt-2" [ngClass]="{notifread: !notification.read}">
-    <span id="notif-text">{{notification.text}}</span>
+    <span id="notif-text">{{notification.textPreview}}</span>
   </div>
 </div>
 
-<button *ngIf="start < notificationsFiltered.length" class="show-more" (click)="appendToView(10)">Показать еще</button>
+<button *ngIf="viewLimit < notificationsFiltered.length" class="show-more" (click)="appendToView(10)">Показать еще</button>
 
-<div class="no-results">
-  <span *ngIf="emptyResult">Отсутствуют уведомления, удовлетворяющие условиям поиска
+<div *ngIf="emptyResult" class="no-results">
+  <span>Отсутствуют уведомления, удовлетворяющие условиям поиска
   </span>
 </div>
 
@@ -66,7 +67,7 @@
         </div>
         <div class="row py-2">
           <div class="col-md-12">
-          <span>{{notificationPopup.text}}</span>
+          <span class="notification-text">{{notificationPopup.text}}</span>
           </div>
         </div>
       </div>
