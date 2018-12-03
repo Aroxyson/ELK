@@ -118,7 +118,7 @@ export class FiltersComponent implements OnInit {
       inputElement.nextSibling.style.visibility = 'visible';
       inputElement.classList.add('is-invalid');
     }
-
+    console.log(moment(inputDate).isValid());
     if (!this.isPeriodRight(inputElement)) {
       inputElement.nextSibling.style.visibility = 'visible';
       inputElement.nextSibling.textContent = 'Неверно задан период';
@@ -137,7 +137,7 @@ export class FiltersComponent implements OnInit {
         this.tempDateStart = moment(inputElement.value, 'DD-MM-YYYY');
         break;
       case 'endDate':
-        this.tempDateEnd = moment(inputElement.value, 'DD-MM-YYYY');
+        this.tempDateEnd = moment(inputElement.value, 'DD-MM-YYYY').add(86399, 's');;
         break;
     }
 

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Flags} from './core/flags';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,9 @@ export class AppComponent {
   removedNotification: Notification;
   length: number = 0;
 
+  constructor() {
+    moment.locale('ru');
+  }
   setFlags(flagsIn: Flags) {
     this.flags = flagsIn;
   }

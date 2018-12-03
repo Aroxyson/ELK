@@ -1,16 +1,16 @@
 <header>
   <div class="container">
-    <div class="row">
-      <div class="col-md-1 my-auto">
-        <div class="row">
-          <div class="col-6 logo"></div>
-          <div class="col-6 logo-title ">
-            Единый<br>Личный<br>Кабинет
+        <nav class="navbar navbar-expand-lg navbar-light header">
+          <div class="navbar-brand">
+            <div class="logo logo-title">
+              Единый<br>Личный<br>Кабинет
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-md-3 my-auto">
-        <nav class="navbar navbar-expand-lg">
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
@@ -27,44 +27,38 @@
                   <a class="dropdown-item" href="#">Something else here</a>
                 </div>
               </li>
+              <li class="nav-item">
+                <input class="form-control mr-sm-2 icon-search-white" type="search" placeholder="Поиск" aria-label="Search">
+              </li>
             </ul>
           </div>
+          <div class="">
+            <div>
+              <span class="ru-language chosen-lang">RU</span>
+              <span class="en-language">EN</span>
+            </div>
+          </div>
+          <div  class=" pr-0">
+            <app-notifications-top
+              [notificationsIn]="notificationsTop"
+              (notificationsOutTop)="setNotifications($event)"
+              (removedNotification)="setRemovedNotification($event)"
+            ></app-notifications-top>
+          </div>
+          <div class="pl-3 row">
+                <span class="avatar"></span>
+              <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Мартин
+              </a>
+              <div class="dropdown-menu  my-auto" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+          </div>
         </nav>
-      </div>
-      <div class="col-md-3 my-auto">
-        <input class="form-control mr-sm-2 icon-search-white" type="search" placeholder="Поиск" aria-label="Search">
-      </div>
-      <div class="col-md-1 my-auto">
-        <div>
-          <span class="ru-language chosen-lang">RU</span>
-          <span class="en-language">EN</span>
-        </div>
-      </div>
-      <div  class="col-md-1">
-        <app-notifications-top
-          [notificationsIn]="notificationsTop"
-          (notificationsOutTop)="setNotifications($event)"
-          (removedNotification)="setRemovedNotification($event)"
-        ></app-notifications-top>
-      </div>
-      <div class="col-md-3 my-auto">
-        <div class="row">
-          <div class="col-md-2 p-0">
-            <span class="avatar"></span>
-          </div>
-          <a class="nav-link dropdown-toggle text-white col-md-10" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Мартин
-          </a>
-          <div class="dropdown-menu  my-auto" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </header>
   <div class="container">
     <div class="row">
@@ -107,15 +101,10 @@
   </div>
 <footer>
   <div class="container">
-    <div class="row">
-      <div class="col-md-2 my-auto">
-        <div class="row">
-          <div class="col-6 logo"></div>
-          <div class="col-6 logo-title ">
-            Единый<br>Личный<br>Кабинет
-          </div>
-        </div>
-      </div>
-      </div>
+    <div class="row footer align-items-center">
+      <div class="col-md-4 span-footer">© 2018 Единый Личный Кабинет НИУ ВШЭ</div>
+      <div class="col-md-4 span-footer-white">Условия пользования сайтом</div>
+      <div class="col-md-4 span-footer-white"><span class="span-footer">Дизайн: </span>Лаборатория дизайна НИУ ВШЭ</div>
     </div>
+  </div>
 </footer>
