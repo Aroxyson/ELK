@@ -25,12 +25,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
   showNotifications(target: HTMLElement) {
     const topNotifications = document.getElementById('top-notifications');
     const showTopNotifications = document.getElementById('show-top-notifs');
-    // const offsetLeft = showTopNotifications.getBoundingClientRect().right - topNotifications.getBoundingClientRect().right;
-
-    console.log(showTopNotifications.getBoundingClientRect().right);
-    console.log(topNotifications.getBoundingClientRect().right);
-
-    // topNotifications.style.right = offsetLeft + 'px';
 
     if (!this.visibility) {
       if (showTopNotifications.contains(target)) {

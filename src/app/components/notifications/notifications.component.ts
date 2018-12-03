@@ -103,9 +103,6 @@ export class NotificationsComponent implements OnInit, OnChanges {
     }
 
     queue.run();
-
-    console.log('this.viewLimit', this.viewLimit);
-    console.log('this.notificationsFiltered', this.notificationsFiltered);
   }
 
   appendToView(incLimit: number) {

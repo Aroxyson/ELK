@@ -17,6 +17,7 @@ export class FiltersComponent implements OnInit {
   flags = new Flags();
   tempDateStart: moment.Moment;
   tempDateEnd: moment.Moment;
+  invalidVisibility = false;
 
   constructor() {}
 
@@ -99,28 +100,28 @@ export class FiltersComponent implements OnInit {
     }
   }
 
-  validateDate(event) {
-    const inputElement = event.path[0];
-    const inputDate = event.path[0].value;
-    const regexpDate = '^(?:(?:31(\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^' +
-      '(?:29(\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1' +
-      '\\d|2[0-8])(\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[2-9]|[2-9]\\d)\\d{2})$';
-    inputElement.nextSibling.style.visibility = 'hidden';
+  validateDate(inputElement: HTMLInputElement) {
+    const inputDate = inputElement.value;
+    const invalidFeedback = document.createElement("div");
+    invalidFeedback.classList.add('invalid-feedback');
+    invalidFeedback.textContent = 'Дата в формате дд.мм.ггг';
+
+    this.invalidVisibility = false;
     inputElement.classList.remove('is-invalid');
     inputElement.classList.remove('is-valid');
 
-    if (inputDate && inputDate.match(regexpDate)) {
-      inputElement.nextSibling.style.visibility = 'hidden';
+    if (inputDate && moment(inputDate, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true).isValid()) {
+
       inputElement.classList.remove('is-invalid');
       inputElement.classList.add('is-valid');
     } else {
-      inputElement.nextSibling.textContent = 'Дата в формате дд.мм.ггг';
-      inputElement.nextSibling.style.visibility = 'visible';
+      document.querySelector('label [id=startDate]')[0].style.display = 'block';
+      //this.invalidVisibility = true;
       inputElement.classList.add('is-invalid');
     }
-    console.log(moment(inputDate).isValid());
+
     if (!this.isPeriodRight(inputElement)) {
-      inputElement.nextSibling.style.visibility = 'visible';
+      this.invalidVisibility = true;
       inputElement.nextSibling.textContent = 'Неверно задан период';
       inputElement.classList.add('is-invalid');
     } else if (this.tempDateStart && this.tempDateEnd) {
@@ -134,20 +135,18 @@ export class FiltersComponent implements OnInit {
   isPeriodRight(inputElement: HTMLInputElement) {
     switch (inputElement.id) {
       case 'startDate':
-        this.tempDateStart = moment(inputElement.value, 'DD-MM-YYYY');
+        this.tempDateStart = moment(inputElement.value);
         break;
       case 'endDate':
-        this.tempDateEnd = moment(inputElement.value, 'DD-MM-YYYY').add(86399, 's');;
+        this.tempDateEnd = moment(inputElement.value).add(86399, 's');;
         break;
     }
 
     if (this.tempDateStart === undefined || this.tempDateEnd === undefined) {
-      console.log('undefined');
       return true;
     }
 
     if (this.tempDateStart && this.tempDateEnd) {
-      console.log('isPeriodRight');
       return moment(this.tempDateStart).isBefore(this.tempDateEnd);
     }
   }

@@ -62,10 +62,11 @@
           <input class="radio" name="date" type="radio" id="dateFilter">
           <span class="radio-custom"></span>
           За период времени
-          <input (input)="validateDate($event)" id="startDate" type="text" name="date" class="tcal form-control" value="" placeholder="Начало периода" disabled/>
-          <div class="invalid-feedback" style="visibility: hidden"></div>
+          <input (input)="validateDate($event.target)"
+                 id="startDate" type="text" class="tcal form-control" placeholder="Начало периода" disabled/>
+          <div class="invalid-feedback">Дата в формате дд.мм.ггг</div>
           <br>
-          <input (input)="validateDate($event)" id="endDate" type="text" name="date" class="tcal form-control" value="" placeholder="Конец периода" disabled/>
+          <input (input)="validateDate($event.target)" id="endDate" type="text" class="tcal form-control" placeholder="Конец периода" disabled/>
           <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div>
         </label>
       </div>
