@@ -15,32 +15,29 @@ export class FiltersComponent implements OnInit {
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
   flags = new Flags();
-  dateStart = '';
-  dateEnd = '';
   tempDateStart: moment.Moment;
   tempDateEnd: moment.Moment;
-  invalidPeriod = false;
   dateForm: FormGroup;
+  datePattern: Array<string> = ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'];
+  isDatePeriodWrong = false;
 
   constructor() {}
 
   ngOnInit() {
     this.flags = new Flags();
     this.dateForm = new FormGroup({
-      'startDate': new FormControl(this.dateStart, [
-        dateValidator,
-        // datePeriodValidator(this.dateForm.controls.startDate, this.dateForm['endDate'])
-      ]),
-      'endDate': new FormControl(this.dateEnd, [dateValidator]),
-    });
+      'startDate': new FormControl('', [dateValidator]),
+      'endDate': new FormControl('', [dateValidator]),
+    }, {validators: datePeriodValidator});
   }
 
-  get startDate() {return this.dateForm.get('startDate'); }
+  get startDate() {console.dir(this.dateForm.get('startDate')); return this.dateForm.get('startDate'); }
   get endDate() {return this.dateForm.get('endDate'); }
 
   emitChanges() {
     this.flagsOut.emit(Object.assign({}, this.flags));
   }
+
   addToFlags(input: HTMLInputElement) {
     switch (input.id) {
       case 'request':
@@ -89,7 +86,7 @@ export class FiltersComponent implements OnInit {
     event.stopPropagation();
   }
 
-  enableInput() {
+  enableInput() { // TODO отрефакторить на использование формконтролов
     const radio: HTMLInputElement = document.querySelector('input[id="dateFilter"]');
     const startDate = <HTMLInputElement> document.getElementById('startDate');
     const endDate = <HTMLInputElement> document.getElementById('endDate');
@@ -114,12 +111,9 @@ export class FiltersComponent implements OnInit {
   }
 
   validateDate(inputElement: HTMLInputElement) {
-    const inputDate = inputElement.value;
+    this.isDatePeriodWrong = false;
 
-    if (!this.isPeriodRight(inputElement)) {
-      inputElement.nextSibling.textContent = 'Неверно задан период';
-      inputElement.classList.add('is-invalid');
-    } else if (this.tempDateStart && this.tempDateEnd) {
+    if (this.isPeriodRight(inputElement)) {
       this.flags.dateFilterStart = this.tempDateStart;
       this.flags.dateFilterEnd = this.tempDateEnd;
       this.flags.dateSortOrder = dateSortOrder.newToOld;
@@ -130,33 +124,53 @@ export class FiltersComponent implements OnInit {
   isPeriodRight(inputElement: HTMLInputElement) {
     switch (inputElement.id) {
       case 'startDate':
-        this.tempDateStart = moment(inputElement.value);
+        this.tempDateStart = moment(inputElement.value, this.datePattern, true);
         break;
       case 'endDate':
-        this.tempDateEnd = moment(inputElement.value).add(86399, 's');;
+        this.tempDateEnd = moment(inputElement.value, this.datePattern, true).add(86399, 's');
         break;
     }
 
     if (this.tempDateStart === undefined || this.tempDateEnd === undefined) {
-      return true;
+      return false;
     }
 
-    if (this.tempDateStart && this.tempDateEnd) {
-      return moment(this.tempDateStart).isBefore(this.tempDateEnd);
+    if (this.tempDateStart.isValid() && this.tempDateEnd.isValid()) {
+      if (moment(this.tempDateStart).isBefore(this.tempDateEnd)) {
+        return true;
+      } else {
+        this.isDatePeriodWrong = true;
+      }
     }
   }
 }
 
 export function dateValidator(form: FormControl) {
-  if (moment(form.value, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true).isValid()) {
+  if (form.value === '') {
     return null;
+  }
+
+  if (moment(form.value, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true).isValid()) {
+    return { validDate: true };
   } else {
-    return { invalidDate: true }
+    return { invalidDate: true };
   }
 }
 
-export function datePeriodValidator(formStart: FormControl, formEnd: FormControl) {
-  if (moment(formStart.value).isBefore(moment(formEnd.value))) {
+export function datePeriodValidator(control: FormGroup) {
+  const startDateString = control.get('startDate').value;
+  const endDateString = control.get('endDate').value;
+  const startDate = moment(startDateString, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true);
+  const endDate = moment(endDateString, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true);
+
+  console.log(startDate);
+  console.log(endDate);
+
+  if (!(startDate.isValid() && endDate.isValid())) {
+    return;
+  }
+
+  if (startDate.isBefore(endDate)) {
     return null;
   } else {
     return { invalidPeriod: true }

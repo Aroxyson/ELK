@@ -58,27 +58,32 @@
           <span class="radio-custom"></span>
           От старых к новым
         </label>
-        <label (click)="enableInput()" for="dateFilter" class="dropdown-item">
+        <label (click)="enableInput($event.target.checked)" for="dateFilter" class="dropdown-item">
           <input class="radio" name="date" type="radio" id="dateFilter">
           <span class="radio-custom"></span>
           За период времени
 
           <form [formGroup]="dateForm">
-          <input formControlName="startDate" required
+            <input formControlName="startDate"
                  (input)="validateDate($event.target)"
-                 [class.is-valid]="!startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
-                 [class.is-invalid]="startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
+                 [class.is-valid]="startDate.errors?.validDate && (startDate.touched || startDate.dirty)"
+                 [class.is-invalid]="startDate.errors?.invalidDate && (startDate.touched || startDate.dirty) || isDatePeriodWrong"
                  id="startDate" type="text" class="tcal form-control" placeholder="Начало периода" disabled/>
-          <div *ngIf="startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
-               class="invalid-feedback">Дата в формате дд.мм.ггг</div>
-          <br>
-          <input formControlName="endDate" required
+            <div *ngIf="startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
+               class="invalid-feedback">Дата в формате ДД.ММ.ГГГГ</div>
+            <div *ngIf="dateForm.errors?.invalidPeriod && (dateForm.touched || dateForm.dirty)"
+               class="invalid-feedback">Неверно задан период</div>
+
+            <br>
+            <input formControlName="endDate"
                  (input)="validateDate($event.target)"
-                 [class.is-valid]="!endDate.errors?.invalidDate"
-                 [class.is-invalid]="endDate.errors?.invalidDate && (endDate.touched || endDate.dirty)"
-                 (input)="validateDate($event.target)" id="endDate" type="text" class="tcal form-control" placeholder="Конец периода" disabled/>
-          <div *ngIf="endDate.errors?.invalidDate && (endDate.touched || endDate.dirty)"
-               class="invalid-feedback">Дата в формате дд.мм.ггг</div>
+                 [class.is-valid]="endDate.errors?.validDate && (endDate.touched || endDate.dirty)"
+                 [class.is-invalid]="(endDate.errors?.invalidDate && (endDate.touched || endDate.dirty)) || isDatePeriodWrong"
+                 id="endDate" type="text" class="tcal form-control" placeholder="Конец периода" disabled/>
+            <div *ngIf="endDate.errors?.invalidDate && (endDate.touched || endDate.dirty)"
+                 class="invalid-feedback">Дата в формате ДД.ММ.ГГГГ</div>
+            <div *ngIf="dateForm.errors?.invalidPeriod && (dateForm.touched || dateForm.dirty)"
+                 class="invalid-feedback">Неверно задан период</div>
           </form>
 
         </label>
