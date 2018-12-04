@@ -62,12 +62,25 @@
           <input class="radio" name="date" type="radio" id="dateFilter">
           <span class="radio-custom"></span>
           За период времени
-          <input (input)="validateDate($event.target)"
+
+          <form [formGroup]="dateForm">
+          <input formControlName="startDate" required
+                 (input)="validateDate($event.target)"
+                 [class.is-valid]="!startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
+                 [class.is-invalid]="startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
                  id="startDate" type="text" class="tcal form-control" placeholder="Начало периода" disabled/>
-          <div class="invalid-feedback">Дата в формате дд.мм.ггг</div>
+          <div *ngIf="startDate.errors?.invalidDate && (startDate.touched || startDate.dirty)"
+               class="invalid-feedback">Дата в формате дд.мм.ггг</div>
           <br>
-          <input (input)="validateDate($event.target)" id="endDate" type="text" class="tcal form-control" placeholder="Конец периода" disabled/>
-          <div class="invalid-feedback" style="visibility: hidden">Дата в формате дд.мм.ггг</div>
+          <input formControlName="endDate" required
+                 (input)="validateDate($event.target)"
+                 [class.is-valid]="!endDate.errors?.invalidDate"
+                 [class.is-invalid]="endDate.errors?.invalidDate && (endDate.touched || endDate.dirty)"
+                 (input)="validateDate($event.target)" id="endDate" type="text" class="tcal form-control" placeholder="Конец периода" disabled/>
+          <div *ngIf="endDate.errors?.invalidDate && (endDate.touched || endDate.dirty)"
+               class="invalid-feedback">Дата в формате дд.мм.ггг</div>
+          </form>
+
         </label>
       </div>
     </div>

@@ -10,6 +10,7 @@ import {FiltersService} from './services/filters.service';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import { NotificationsTopComponent } from './components/notifications-top/notifications-top.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,8 @@ import { NotificationsTopComponent } from './components/notifications-top/notifi
   ],
   imports: [
     HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
     [BrowserModule, InfiniteScrollModule]
   ],
   providers: [RestApiService, FiltersService],

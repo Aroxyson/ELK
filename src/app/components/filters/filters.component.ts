@@ -3,7 +3,7 @@ import {EventEmitter} from '@angular/core';
 import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
 import * as moment from 'moment';
-import {FiltersService} from '../../services/filters.service';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-filters',
@@ -15,15 +15,28 @@ export class FiltersComponent implements OnInit {
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
   flags = new Flags();
+  dateStart = '';
+  dateEnd = '';
   tempDateStart: moment.Moment;
   tempDateEnd: moment.Moment;
-  invalidVisibility = false;
+  invalidPeriod = false;
+  dateForm: FormGroup;
 
   constructor() {}
 
   ngOnInit() {
     this.flags = new Flags();
+    this.dateForm = new FormGroup({
+      'startDate': new FormControl(this.dateStart, [
+        dateValidator,
+        // datePeriodValidator(this.dateForm.controls.startDate, this.dateForm['endDate'])
+      ]),
+      'endDate': new FormControl(this.dateEnd, [dateValidator]),
+    });
   }
+
+  get startDate() {return this.dateForm.get('startDate'); }
+  get endDate() {return this.dateForm.get('endDate'); }
 
   emitChanges() {
     this.flagsOut.emit(Object.assign({}, this.flags));
@@ -102,26 +115,8 @@ export class FiltersComponent implements OnInit {
 
   validateDate(inputElement: HTMLInputElement) {
     const inputDate = inputElement.value;
-    const invalidFeedback = document.createElement("div");
-    invalidFeedback.classList.add('invalid-feedback');
-    invalidFeedback.textContent = 'Дата в формате дд.мм.ггг';
-
-    this.invalidVisibility = false;
-    inputElement.classList.remove('is-invalid');
-    inputElement.classList.remove('is-valid');
-
-    if (inputDate && moment(inputDate, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true).isValid()) {
-
-      inputElement.classList.remove('is-invalid');
-      inputElement.classList.add('is-valid');
-    } else {
-      document.querySelector('label [id=startDate]')[0].style.display = 'block';
-      //this.invalidVisibility = true;
-      inputElement.classList.add('is-invalid');
-    }
 
     if (!this.isPeriodRight(inputElement)) {
-      this.invalidVisibility = true;
       inputElement.nextSibling.textContent = 'Неверно задан период';
       inputElement.classList.add('is-invalid');
     } else if (this.tempDateStart && this.tempDateEnd) {
@@ -149,5 +144,21 @@ export class FiltersComponent implements OnInit {
     if (this.tempDateStart && this.tempDateEnd) {
       return moment(this.tempDateStart).isBefore(this.tempDateEnd);
     }
+  }
+}
+
+export function dateValidator(form: FormControl) {
+  if (moment(form.value, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true).isValid()) {
+    return null;
+  } else {
+    return { invalidDate: true }
+  }
+}
+
+export function datePeriodValidator(formStart: FormControl, formEnd: FormControl) {
+  if (moment(formStart.value).isBefore(moment(formEnd.value))) {
+    return null;
+  } else {
+    return { invalidPeriod: true }
   }
 }
