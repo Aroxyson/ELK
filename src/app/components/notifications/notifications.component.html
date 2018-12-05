@@ -34,7 +34,7 @@
 
 <button *ngIf="viewLimit < notificationsFiltered.length" class="show-more" (click)="appendToView(10)">Показать еще</button>
 
-<div *ngIf="emptyResult" class="no-results">
+<div *ngIf="isNotificationsEmpty" class="no-results">
   <span>Отсутствуют уведомления, удовлетворяющие условиям поиска
   </span>
 </div>

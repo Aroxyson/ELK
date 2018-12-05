@@ -3,6 +3,7 @@ import {Flags} from '../core/flags';
 import {Notification} from '../core/notification';
 import {dateSortOrder} from '../core/dateSortOrder';
 import * as moment from 'moment';
+import {nameSortOrder} from "../core/nameSortOrder";
 
 @Injectable({
   providedIn: 'root'
@@ -66,17 +67,19 @@ export class FiltersService {
     });
   }
 
-  sortNotificationsByName(notifications: Notification[], order: boolean): Notification[] {
+  sortNotificationsByName(notifications: Notification[], order: nameSortOrder): Notification[] {
     let comparator;
     const directCompareByName = function(a: Notification, b: Notification) {
       return a.name > b.name ? 1 : -1;
     };
 
     switch (order) {
-      case true:
+      case nameSortOrder.disabled:
+        return;
+      case nameSortOrder.straight:
         comparator = directCompareByName;
         break;
-      case false:
+      case nameSortOrder.reverse:
         comparator = function(a: Notification, b: Notification) {
           return directCompareByName(a, b) * (-1);
         };
@@ -85,14 +88,14 @@ export class FiltersService {
     return notifications.sort(comparator);
   }
 
-  sortNotificationsByDate(notifications: Notification[], flags: Flags): Notification[] {
+  sortNotificationsByDate(notifications: Notification[], order: dateSortOrder): Notification[] {
     let comparator;
 
     const directCompareByDate = function(a: Notification, b: Notification) {
       return a.date > b.date ? 1 : -1;
     };
 
-    switch (flags.dateSortOrder) {
+    switch (order) {
       case dateSortOrder.disabled:
         return;
       case dateSortOrder.oldToNew:

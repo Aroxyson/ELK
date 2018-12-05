@@ -4,6 +4,7 @@ import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
 import * as moment from 'moment';
 import {FormControl, FormGroup} from "@angular/forms";
+import {nameSortOrder} from "../../core/nameSortOrder";
 
 @Component({
   selector: 'app-filters',
@@ -40,8 +41,8 @@ export class FiltersComponent implements OnInit {
 
   addToFlags(input: HTMLInputElement) {
     switch (input.id) {
-      case 'nameSort':
-        this.flags.nameSort = !this.flags.nameSort;
+      case 'nameSortOrder':
+        this.flags.nameSortOrder = this.flags.nameSortOrder === nameSortOrder.straight ? nameSortOrder.reverse : nameSortOrder.straight;
         break;
       case 'request':
         this.flags.request = input.checked;
@@ -73,6 +74,7 @@ export class FiltersComponent implements OnInit {
         this.flags.dateSortOrder = dateSortOrder.oldToNew;
         break;
     }
+    this.flags.nameSortOrder = nameSortOrder.disabled;
     this.flags.dateFilterStart = undefined;
     this.flags.dateFilterEnd = undefined;
     this.emitChanges();
@@ -106,17 +108,26 @@ export class FiltersComponent implements OnInit {
       this.flags.dateFilterStart = this.tempDateStart;
       this.flags.dateFilterEnd = this.tempDateEnd;
       this.flags.dateSortOrder = dateSortOrder.newToOld;
-      this.emitChanges();
     }
+
+    this.emitChanges();
   }
 
   isPeriodRight(inputElement: HTMLInputElement) {
     switch (inputElement.id) {
       case 'startDate':
-        this.tempDateStart = moment(inputElement.value, this.datePattern, true);
+        if (inputElement.value === '') {
+          this.flags.dateFilterStart = this.tempDateStart =undefined;
+        } else {
+          this.tempDateStart = moment(inputElement.value, this.datePattern, true);
+        }
         break;
       case 'endDate':
-        this.tempDateEnd = moment(inputElement.value, this.datePattern, true).add(86399, 's');
+        if (inputElement.value === '') {
+          this.flags.dateFilterEnd = this.tempDateEnd = undefined;
+        } else {
+          this.tempDateEnd = moment(inputElement.value, this.datePattern, true).add(86399, 's');
+        }
         break;
     }
 

@@ -3,6 +3,8 @@ import {RestApiService} from '../../services/rest-api.service';
 import {Notification} from '../../core/notification';
 import {FiltersService} from '../../services/filters.service';
 import {Flags} from '../../core/flags';
+import {nameSortOrder} from "../../core/nameSortOrder";
+import {dateSortOrder} from "../../core/dateSortOrder";
 
 @Component({
   selector: 'app-notifications',
@@ -17,13 +19,12 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
   notifications: Notification[] = [];
   notificationsFiltered: Notification[] = [];
-  notificationsView: Notification[] = [];
   notificationPopup: Notification = new Notification();
   checkedNotifications: Notification[] = [];
-  queueFunc: Array<any> = [];
   viewLimit: number = 0;
   showingNotifications: number = 10;
-  emptyResult = false;
+  isNotificationsEmpty = false;
+  lastSort: Function = function () {};
 
   constructor(private restApiService: RestApiService, private filterService: FiltersService) {
   }
@@ -36,22 +37,6 @@ export class NotificationsComponent implements OnInit, OnChanges {
     const current = changes.flags ? changes.flags.currentValue : this.flags;
     const previous = changes.flags ? changes.flags.previousValue : this.flags;
     const removedNotification = changes.removedNotification ? changes.removedNotification.currentValue : undefined;
-    const queue = new Queue(this.queueFunc);
-
-    function Queue(arrayFunc: Array<any>) {
-      this.run = function () {
-        for (let i = 0; i < arrayFunc.length; i++) {
-          if (typeof arrayFunc[i] === 'function') {
-            arrayFunc[i]();
-          }
-        }
-      };
-    }
-
-    // if (this.notifications.length === 0) {
-    //   alert('Уведомления отсутствуют');
-    //   return;
-    // }
 
     if (removedNotification) {
       this.checkedNotifications.splice(this.checkedNotifications.indexOf(removedNotification), 1);
@@ -76,6 +61,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
     }
 
     if (previous) {
+
       if (current.checkAll !== previous.checkAll) {
         if (current.checkAll === false) {
           this.notifications.map(notification => {
@@ -90,19 +76,19 @@ export class NotificationsComponent implements OnInit, OnChanges {
           }
         }
       }
-      if (current.nameSort !== previous.nameSort) {
-        this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
-        this.queueFunc.push(this.nameSort(previous, current));
-      }
-      if (current.dateSortOrder !== previous.dateSortOrder) {
-        this.queueFunc = this.queueFunc.length >= 2 ? this.queueFunc.slice(1, 2) : this.queueFunc;
-        this.queueFunc.push(this.dateSort(current));
+
+      if (current.nameSortOrder !== nameSortOrder.disabled && current.nameSortOrder !== previous.nameSortOrder) {
+        this.lastSort = this.nameSort;
       }
 
-      this.emptyResult = this.notificationsFiltered.length <= 0;
+      if (current.dateSortOrder !== dateSortOrder.disabled && current.dateSortOrder !== previous.dateSortOrder) {
+        this.lastSort = this.dateSort;
+      }
+
+      this.isNotificationsEmpty = this.notificationsFiltered.length <= 0;
     }
 
-    queue.run();
+    this.lastSort(current);
   }
 
   appendToView(incLimit: number) {
@@ -145,27 +131,20 @@ export class NotificationsComponent implements OnInit, OnChanges {
     });
   }
 
-  nameSort(previous: Flags, current: Flags) {
-    if (current.nameSort) {
-      this.notificationsFiltered = this.filterService.sortNotificationsByName(this.notificationsFiltered, true);
-      console.log('A->Z');
-    } else {
-      this.notificationsFiltered = this.filterService.sortNotificationsByName(this.notificationsFiltered, false);
-      console.log('Z->A');
-    }
+  nameSort(current: Flags) {
+    this.notificationsFiltered = this.filterService.sortNotificationsByName(this.notificationsFiltered, current.nameSortOrder);
   }
 
   dateSort(current: Flags) {
-    this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, current);
+    this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, current.dateSortOrder);
   }
 
   markAs(id: string) {
     switch (id) {
       case 'as-archive':
-        // this.notificationsFiltered = this.notificationsFiltered.map(notification => {
+        // this.notifications.map(notification => {
         //   if (notification.checked) {
-        //     this.notificationsFiltered.splice(this.notificationsFiltered.indexOf(notification), 1);
-        //     console.log(this.notificationsFiltered);
+        //     this.notifications.splice(this.notifications.indexOf(notification),1);
         //   }
         //   return notification;
         // });
