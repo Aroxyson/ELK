@@ -30,3 +30,11 @@ label {
   background-size: auto 50%;
   padding-right: 30px;
 }
+
+.column-title {
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  border: 0;
+  outline-width: 0;
+}

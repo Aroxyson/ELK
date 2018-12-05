@@ -45,12 +45,6 @@ header, footer {
   height: 60px;
 }
 
-.column-title {
-  cursor: pointer;
-  color: black;
-  font-weight: bold;
-}
-
 .small-text{
   font-size: .8em;
   color: #747474;

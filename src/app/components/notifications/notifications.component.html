@@ -43,25 +43,29 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body">
-        <div class="btn-group notif-action-group">
-          <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action" id="as-archive-popup">Архивировать</button>
-          <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action" id="as-read-popup">Отметить как непрочитанное</button>
-          <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action" id="as-important-popup">Отметить как неважное</button>
-        </div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <div class="notif-action-group row">
+          <div class="col-12">
+            <div class="row">
+              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-md-4" id="as-archive-popup">Архивировать</button>
+              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-md-4" id="as-read-popup">Отметить как непрочитанное</button>
+              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-md-4" id="as-important-popup">Отметить как неважное</button>
+            </div>
+          </div>
+        </div>
         <div class="row py-4 text-center">
-          <div class="col-md-3">
+          <div class="col-md-3  col-6">
             <span class="small-text">{{notificationPopup.typeRu}}</span>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3  col-6">
             <span class="small-text">{{notificationPopup.name}}</span>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3  col-6">
             <span class="small-text">{{notificationPopup.dateString}}</span>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3  col-6">
           <span *ngIf="notificationPopup.important" class="badge badge-danger">Важное</span>
           </div>
         </div>

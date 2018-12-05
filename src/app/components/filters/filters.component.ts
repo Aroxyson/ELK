@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit, Output} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
@@ -11,15 +11,15 @@ import {FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./filters.component.css']
 })
 export class FiltersComponent implements OnInit {
-  @Input() checkedStatus;
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
-  flags = new Flags();
-  tempDateStart: moment.Moment;
-  tempDateEnd: moment.Moment;
+  private flags = new Flags();
+  private tempDateStart: moment.Moment;
+  private tempDateEnd: moment.Moment;
+  private datePattern: Array<string> = ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'];
   dateForm: FormGroup;
-  datePattern: Array<string> = ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'];
   isDatePeriodWrong = false;
+  inputDateDisabled = true;
 
   constructor() {}
 
@@ -31,7 +31,7 @@ export class FiltersComponent implements OnInit {
     }, {validators: datePeriodValidator});
   }
 
-  get startDate() {console.dir(this.dateForm.get('startDate')); return this.dateForm.get('startDate'); }
+  get startDate() {return this.dateForm.get('startDate'); }
   get endDate() {return this.dateForm.get('endDate'); }
 
   emitChanges() {
@@ -40,6 +40,9 @@ export class FiltersComponent implements OnInit {
 
   addToFlags(input: HTMLInputElement) {
     switch (input.id) {
+      case 'nameSort':
+        this.flags.nameSort = !this.flags.nameSort;
+        break;
       case 'request':
         this.flags.request = input.checked;
         break;
@@ -61,11 +64,6 @@ export class FiltersComponent implements OnInit {
     this.emitChanges();
     }
 
-  addNameSort() {
-    this.flags.nameSort = !this.flags.nameSort;
-    this.emitChanges();
-  }
-
   addDateSort(input: HTMLInputElement) {
     switch (input.id) {
       case 'newToOld':
@@ -79,34 +77,25 @@ export class FiltersComponent implements OnInit {
     this.flags.dateFilterEnd = undefined;
     this.emitChanges();
 
-    this.enableInput();
+    this.enableInput(false);
   }
 
   stopPropagation(event) {
     event.stopPropagation();
   }
 
-  enableInput() { // TODO отрефакторить на использование формконтролов
-    const radio: HTMLInputElement = document.querySelector('input[id="dateFilter"]');
-    const startDate = <HTMLInputElement> document.getElementById('startDate');
-    const endDate = <HTMLInputElement> document.getElementById('endDate');
-
-    if (radio.checked) {
-      startDate.disabled = false;
-      endDate.disabled = false;
+  enableInput(checkedStatus: boolean) {
+    if (checkedStatus) {
+      this.startDate.enable();
+      this.endDate.enable();
     } else {
-      startDate.disabled = true;
-      endDate.disabled = true;
-      startDate.value = '';
-      endDate.value = '';
-      startDate.classList.remove('is-invalid');
-      startDate.classList.remove('is-valid');
-      startDate.classList.remove('tcalActive');
-      endDate.classList.remove('is-invalid');
-      endDate.classList.remove('is-valid');
-      endDate.classList.remove('tcalActive');
-      const tCal = document.getElementById('tcal');
-      tCal.style.visibility = '';
+      this.tempDateStart = this.tempDateEnd = undefined;
+      this.startDate.disable();
+      this.endDate.disable();
+      this.startDate.setValue('');
+      this.endDate.setValue('');
+      this.inputDateDisabled = true;
+      document.getElementById('tcal').style.visibility = '';
     }
   }
 
@@ -162,9 +151,6 @@ export function datePeriodValidator(control: FormGroup) {
   const endDateString = control.get('endDate').value;
   const startDate = moment(startDateString, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true);
   const endDate = moment(endDateString, ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'], true);
-
-  console.log(startDate);
-  console.log(endDate);
 
   if (!(startDate.isValid() && endDate.isValid())) {
     return;
