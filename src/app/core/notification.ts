@@ -51,10 +51,8 @@ export class Notification {
     this.importanceRu = json_item.importance;
     this.typeRu = json_item.type;
     this.name = json_item.name;
-    console.log(moment(json_item.date));
     this.date = new Date(Date.parse(json_item.date));
     this.dateString = moment(this.date).format('hh:mm DD MMM');
-    //this.dateString = this.date.getHours() + ':' + this.date.getMinutes() + ' ' + this.date.toLocaleDateString('ru', options);
     this.text = json_item.text;
     this.textPreview = this.trimToWord(this.text, 150) + '...';
   }

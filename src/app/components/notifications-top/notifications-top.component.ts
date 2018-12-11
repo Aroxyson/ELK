@@ -42,7 +42,7 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
 
   deleteNotification(notification: Notification) {
     this.notifications.splice(this.notifications.indexOf(notification),1);
-    this.notificationsOutTop.emit(this.notifications);
+    //this.notificationsOutTop.emit(this.notifications);
     this.removedNotification.emit(notification);
   }
 }

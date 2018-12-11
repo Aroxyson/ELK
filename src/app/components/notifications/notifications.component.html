@@ -11,7 +11,7 @@
   <div class="col-md-3">
     <label class="notif-checkbox">
       <input
-        (change)="setChecked(notification, $event.target.checked)"
+        (change)="setCheckedStatus(notification, $event.target.checked)"
         [checked]="notification.checked"
         class="checkbox notif-checkbox" type="checkbox" name="checkbox-test">
       <span class="checkbox-custom notif-checkbox"></span>
@@ -49,9 +49,9 @@
         <div class="notif-action-group row">
           <div class="col-12">
             <div class="row">
-              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-md-4" id="as-archive-popup">Архивировать</button>
-              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-md-4" id="as-read-popup">Отметить как непрочитанное</button>
-              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-md-4" id="as-important-popup">Отметить как неважное</button>
+              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-lg-4" id="as-archive-popup">Архивировать</button>
+              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-lg-4" id="as-read-popup">Отметить как непрочитанное</button>
+              <button (click)="markPopupAs(notificationPopup, $event.target.id)" class="notif-action col-12 col-lg-4" id="as-important-popup">Отметить как неважное</button>
             </div>
           </div>
         </div>

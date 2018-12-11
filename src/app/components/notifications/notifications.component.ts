@@ -16,6 +16,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
   @Input() notificationsIn: Notification[];
   @Input() removedNotification: Notification;
   @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
+  @Output() uncheckInput: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   notifications: Notification[] = [];
   notificationsFiltered: Notification[] = [];
@@ -34,61 +35,43 @@ export class NotificationsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    const flagsInitial = new Flags();
     const current = changes.flags ? changes.flags.currentValue : this.flags;
-    const previous = changes.flags ? changes.flags.previousValue : this.flags;
+    const previous = changes.flags ? changes.flags.previousValue : flagsInitial;
     const removedNotification = changes.removedNotification ? changes.removedNotification.currentValue : undefined;
-
-    if (removedNotification) {
-      this.checkedNotifications.splice(this.checkedNotifications.indexOf(removedNotification), 1);
+    console.log(this.notifications);
+    if (!current.checkAll) {
+      this.setUncheckedAll(this.notifications);
     }
 
-    if (current.request || current.approval || current.revision) {
-      this.notificationsFiltered = this.filterService.filterByType(this.notifications, current);
-    } else {
-      this.notificationsFiltered = this.notifications;
+    this.checkedNotifications = this.filterService.removeNotification(this.checkedNotifications, removedNotification);
+
+    this.notificationsFiltered = this.filterService.filterByType(this.notifications, current);
+
+    this.notificationsFiltered = this.filterService.filterByImportance(this.notificationsFiltered, current);
+
+    this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
+
+    this.notificationsFiltered = this.filterService.filterByName(this.notificationsFiltered, current.searchFilter);
+
+    if (current.nameSortOrder !== previous.nameSortOrder) {
+      this.lastSort = this.nameSort;
     }
 
-    if (current.important) {
-      this.notificationsFiltered = this.filterService.filterByImportance(this.notificationsFiltered, current);
-    }
-
-    if (current.dateFilterStart && current.dateFilterEnd) {
-      this.notificationsFiltered = this.filterService.filterByDate(this.notificationsFiltered, current);
-    }
-
-    if (current.searchFilter) {
-      this.notificationsFiltered = this.filterService.filterByName(this.notificationsFiltered, current.searchFilter);
-    }
-
-    if (previous) {
-
-      if (current.checkAll !== previous.checkAll) {
-        if (current.checkAll === false) {
-          this.notifications.map(notification => {
-            notification.checked = false;
-            this.checkedNotifications = [];
-          });
-        }
-        if (current.checkAll === true) {
-          let limit = this.notificationsFiltered.length < this.viewLimit ? this.notificationsFiltered.length : this.viewLimit;
-          for (let i = 0; i < limit; i++) {
-            this.setChecked(this.notificationsFiltered[i], true);
-          }
-        }
-      }
-
-      if (current.nameSortOrder !== nameSortOrder.disabled && current.nameSortOrder !== previous.nameSortOrder) {
-        this.lastSort = this.nameSort;
-      }
-
-      if (current.dateSortOrder !== dateSortOrder.disabled && current.dateSortOrder !== previous.dateSortOrder) {
-        this.lastSort = this.dateSort;
-      }
-
-      this.isNotificationsEmpty = this.notificationsFiltered.length <= 0;
+    if (current.dateSortOrder !== previous.dateSortOrder) {
+      this.lastSort = this.dateSort;
     }
 
     this.lastSort(current);
+
+    if (current.checkAll) {
+      let limit = this.notificationsFiltered.length < this.viewLimit ? this.notificationsFiltered.length : this.viewLimit;
+      for (let i = 0; i < limit; i++) {
+        this.setCheckedStatus(this.notificationsFiltered[i], true);
+      }
+    }
+
+    this.isNotificationsEmpty = this.notificationsFiltered.length < 1;
   }
 
   appendToView(incLimit: number) {
@@ -106,13 +89,20 @@ export class NotificationsComponent implements OnInit, OnChanges {
     notification.read = true;
   }
 
-  setChecked(notification: Notification, checkedStatus: boolean) {
+  setCheckedStatus(notification: Notification, checkedStatus: boolean) {
     notification.checked = checkedStatus;
     if (notification.checked) {
       this.checkedNotifications.push(notification);
     } else {
       this.checkedNotifications.splice(this.checkedNotifications.indexOf(notification), 1);
     }
+  }
+
+  setUncheckedAll(notifications: Notification[]) {
+    this.checkedNotifications = [];
+    return notifications.map( notification => {
+      notification.checked = false;
+    });
   }
 
   sendNotifications() {
@@ -142,12 +132,12 @@ export class NotificationsComponent implements OnInit, OnChanges {
   markAs(id: string) {
     switch (id) {
       case 'as-archive':
-        // this.notifications.map(notification => {
-        //   if (notification.checked) {
-        //     this.notifications.splice(this.notifications.indexOf(notification),1);
-        //   }
-        //   return notification;
-        // });
+        this.checkedNotifications.forEach(notification => {
+            this.notifications.splice(this.notifications.indexOf(notification),1);
+        });
+        this.checkedNotifications = [];
+        this.uncheckInput.emit(true);
+        this.sendNotifications();
         break;
       case 'as-read':
         this.notifications = this.notificationsFiltered.map(notification => {

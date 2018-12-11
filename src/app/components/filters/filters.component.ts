@@ -1,4 +1,4 @@
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {Flags} from '../../core/flags';
 import {dateSortOrder} from '../../core/dateSortOrder';
@@ -11,7 +11,8 @@ import {nameSortOrder} from "../../core/nameSortOrder";
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.css']
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnChanges {
+  @Input() uncheckInputIn: boolean;
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
   private flags = new Flags();
@@ -19,6 +20,7 @@ export class FiltersComponent implements OnInit {
   private tempDateEnd: moment.Moment;
   private datePattern: Array<string> = ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'];
   dateForm: FormGroup;
+  checkAllForm: FormGroup;
   isDatePeriodWrong = false;
   inputDateDisabled = true;
 
@@ -26,10 +28,19 @@ export class FiltersComponent implements OnInit {
 
   ngOnInit() {
     this.flags = new Flags();
+    this.checkAllForm = new FormGroup({
+      'checkAll': new FormControl(false)
+    });
     this.dateForm = new FormGroup({
       'startDate': new FormControl('', [dateValidator]),
       'endDate': new FormControl('', [dateValidator]),
     }, {validators: datePeriodValidator});
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.uncheckInputIn.currentValue) {
+      this.checkAllForm.controls['checkAll'].setValue(false);
+    }
   }
 
   get startDate() {return this.dateForm.get('startDate'); }
@@ -62,6 +73,9 @@ export class FiltersComponent implements OnInit {
       case 'search-filter':
         this.flags.searchFilter = input.value;
     }
+
+    this.uncheckInput(input.id);
+
     this.emitChanges();
     }
 
@@ -77,13 +91,18 @@ export class FiltersComponent implements OnInit {
     this.flags.nameSortOrder = nameSortOrder.disabled;
     this.flags.dateFilterStart = undefined;
     this.flags.dateFilterEnd = undefined;
+    this.uncheckInput(input.id);
     this.emitChanges();
 
     this.enableInput(false);
   }
 
-  stopPropagation(event) {
-    event.stopPropagation();
+  uncheckInput(id: string) {
+    if ((id !== 'check-all') && (this.checkAllForm.controls['checkAll'].value === true)) {
+      this.flags.checkAll = false;
+      this.checkAllForm.controls['checkAll'].setValue(false);
+      this.emitChanges();
+    }
   }
 
   enableInput(checkedStatus: boolean) {
@@ -97,7 +116,10 @@ export class FiltersComponent implements OnInit {
       this.startDate.setValue('');
       this.endDate.setValue('');
       this.inputDateDisabled = true;
-      document.getElementById('tcal').style.visibility = '';
+      const tcal = document.getElementById('tcal');
+      if (tcal) {
+        tcal.style.visibility = '';
+      }
     }
   }
 

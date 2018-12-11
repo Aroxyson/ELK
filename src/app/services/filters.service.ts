@@ -12,59 +12,70 @@ export class FiltersService {
 
   constructor() { }
 
-  filterByType(notification: Notification[], flags: Flags): Notification[] {
+  filterByType(notifications: Notification[], flags: Flags): Notification[] {
     function isContainAny(notificationFunc: Notification, flagsFunc: Flags): boolean {
-        for (const flag in flagsFunc) {
-          if (flagsFunc[flag] && (notificationFunc.type === flag)) {
-            return true;
-          }
+      for (const flag in flagsFunc) {
+        if (flagsFunc[flag] && (notificationFunc.type === flag)) {
+          return true;
         }
-    }
-
-    if (!flags) {
-      return notification;
-    }
-
-    return notification.filter
-    (item => isContainAny(item, flags));
-  }
-
-  filterByImportance(notification: Notification[], flags: Flags): Notification[] {
-    function isContain(notificationFunc: Notification, flagsFunc: Flags): boolean {
-      if (flagsFunc.important && notificationFunc.important) {
-        return true;
       }
     }
 
-    if (!flags) {
-      return notification;
+    if (!notifications) {
+      return;
     }
 
-    return notification.filter
-    (item => isContain(item, flags));
+    if (flags.request || flags.approval || flags.revision) {
+      return notifications.filter
+      (item => isContainAny(item, flags));
+    } else {
+      return notifications;
+    }
+  }
+
+  filterByImportance(notifications: Notification[], flags: Flags): Notification[] {
+    if (!notifications) {
+      return;
+    }
+
+    if (flags.important) {
+      return notifications.filter
+      (item => item.important);
+    } else {
+      return notifications;
+    }
   }
 
   filterByDate(notifications: Notification[], flags: Flags): Notification[] {
     function isInPeriod(notification: Notification, flagsFunc: Flags): boolean {
       return (moment(notification.date).isBefore(flagsFunc.dateFilterEnd) && moment(flagsFunc.dateFilterStart).isBefore(notification.date));
     }
-    return notifications.filter(item => isInPeriod(item, flags));
+
+    if (!notifications) {
+      return;
+    }
+
+    if (flags.dateFilterStart && flags.dateFilterEnd) {
+      return notifications.filter(item => isInPeriod(item, flags));
+    } else {
+      return notifications;
+    }
   }
 
   filterByName(notifications: Notification[], searchText: string): Notification[] {
-    if (!searchText) {
-      return notifications;
-    }
-
     if (!notifications) {
       return [];
     }
 
-    searchText = searchText.toLowerCase();
+    if (searchText) {
+      searchText = searchText.toLowerCase();
 
-    return notifications.filter( item => {
-      return item.text.toLowerCase().includes(searchText);
-    });
+      return notifications.filter( item => {
+        return item.text.toLowerCase().includes(searchText);
+      });
+    } else {
+      return notifications;
+    }
   }
 
   sortNotificationsByName(notifications: Notification[], order: nameSortOrder): Notification[] {
@@ -75,7 +86,7 @@ export class FiltersService {
 
     switch (order) {
       case nameSortOrder.disabled:
-        return;
+        return notifications;
       case nameSortOrder.straight:
         comparator = directCompareByName;
         break;
@@ -97,7 +108,7 @@ export class FiltersService {
 
     switch (order) {
       case dateSortOrder.disabled:
-        return;
+        return notifications;
       case dateSortOrder.oldToNew:
         comparator = directCompareByDate;
         break;
@@ -108,5 +119,17 @@ export class FiltersService {
         break;
     }
     return notifications.sort(comparator);
+  }
+
+  removeNotification(notifications: Notification[], notification: Notification): Notification[] {
+    if (!notifications) {
+      return [];
+    }
+
+    if (notification) {
+      return notifications.splice(notifications.indexOf(notification), 1);
+    } else {
+      return notifications;
+    }
   }
 }

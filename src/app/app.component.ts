@@ -13,6 +13,7 @@ export class AppComponent {
   notificationsTop: Notification[] = [];
   removedNotification: Notification;
   length: number = 0;
+  uncheckInput = false;
 
   constructor() {
     moment.locale('ru');
@@ -33,5 +34,10 @@ export class AppComponent {
 
   setRemovedNotification(notification: Notification) {
     this.removedNotification = notification;
+  }
+
+  setUncheckInput(value: boolean) {
+    console.log('value ', value);
+    this.uncheckInput = value;
   }
 }

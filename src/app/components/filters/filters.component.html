@@ -8,17 +8,20 @@
 <div class="row border-top border-bottom py-4">
   <div class="col-md-3 text-dark">
     <div class="dropdown">
-      <label class="notif-checkbox">
-        <input
-          (change)="addToFlags($event.target)"
-          id="check-all"
-          class="checkbox notif-checkbox" type="checkbox">
-        <span class="checkbox-custom checkbox-custom-black notif-checkbox"></span>
-      </label>
+      <form [formGroup]="checkAllForm">
+        <label class="notif-checkbox">
+          <input
+            formControlName="checkAll"
+            (change)="addToFlags($event.target)"
+            id="check-all"
+            class="checkbox notif-checkbox" type="checkbox">
+          <span class="checkbox-custom checkbox-custom-black notif-checkbox"></span>
+        </label>
+      </form>
       <span class="dropdown-toggle column-title" href="#" role="button" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Тип сообщения
       </span>
-      <div (click)="stopPropagation($event)" class="dropdown-menu" aria-labelledby="dropdown">
+      <div (click)="$event.stopPropagation()" class="dropdown-menu" aria-labelledby="dropdown">
         <label for="request" class="dropdown-item">
           <input type="checkbox" class="checkbox" id="request" (change)="addToFlags($event.target)">
           <span class="checkbox-custom"></span>
@@ -48,8 +51,8 @@
       <span class="dropdown-toggle dropdown-toggle  column-title" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Дата
       </span>
-      <div (click)="stopPropagation($event)" id="dateDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <label (click)="addDateSort($event.target)" for="newToOld" class="dropdown-item">
+      <div (click)="$event.stopPropagation()" id="dateDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <label (change)="addDateSort($event.target)" for="newToOld" class="dropdown-item">
           <input class="radio" name="date" type="radio" id="newToOld">
           <span class="radio-custom"></span>
           От новых к старым
@@ -59,7 +62,7 @@
           <span class="radio-custom"></span>
           От старых к новым
         </label>
-        <label for="dateFilter" class="dropdown-item">
+        <label (click)="uncheckInput('dateFilter')" for="dateFilter" class="dropdown-item">
           <input (change)="enableInput($event.target.checked)"
                   class="radio" name="date" type="radio" id="dateFilter">
           <span class="radio-custom"></span>
@@ -99,7 +102,7 @@
       <span class="dropdown-toggle  column-title" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Важность
       </span>
-      <div (click)="stopPropagation($event)" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <div (click)="$event.stopPropagation()" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <label for="importance" class="dropdown-item">
           <input (change)="addToFlags($event.target)"  class="checkbox" name="importance" type="checkbox" id="importance">
           <span class="checkbox-custom"></span>

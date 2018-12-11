@@ -32,13 +32,13 @@
               </li>
             </ul>
           </div>
-          <div class="">
+          <div class="col-1">
             <div>
               <span class="ru-language chosen-lang">RU</span>
               <span class="en-language">EN</span>
             </div>
           </div>
-          <div  class=" pr-0">
+          <div  class="col-1 pr-0">
             <app-notifications-top
               [notificationsIn]="notificationsTop"
               (notificationsOutTop)="setNotifications($event)"
@@ -46,7 +46,8 @@
             ></app-notifications-top>
           </div>
           <div class="pl-3 row">
-                <span class="avatar"></span>
+            <div class="col-12 d-flex">
+              <span class="avatar"></span>
               <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Мартин
               </a>
@@ -56,6 +57,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
+            </div>
           </div>
         </nav>
     </div>
@@ -84,9 +86,12 @@
     </div>
       <div class="row">
       <div class="col-md-9">
-        <app-filters (flagsOut)="setFlags($event)"></app-filters>
+        <app-filters
+          (flagsOut)="setFlags($event)"
+          [uncheckInputIn]="uncheckInput"></app-filters>
         <app-notifications
           (notificationsOut)="setNotificationsTop($event)"
+          (uncheckInput)="setUncheckInput($event)"
           [notificationsIn]="notifications"
           [flags]="flags"
           [removedNotification]="removedNotification"></app-notifications>
