@@ -13,7 +13,6 @@ import {dateSortOrder} from "../../core/dateSortOrder";
 })
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
-  @Input() notificationsIn: Notification[];
   @Input() removedNotification: Notification;
   @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
   @Output() uncheckInput: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -31,7 +30,15 @@ export class NotificationsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.initNotifications();
+    this.restApiService.receiveItems().subscribe((notifications) => {
+      this.notifications = notifications;
+      this.notificationsFiltered = this.notifications;
+      this.notificationsOut.emit(this.notifications);
+      this.viewLimit = 0;
+      this.appendToView(this.showingNotifications);
+    }, error => {
+      console.log(error.message);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -39,7 +46,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
     const current = changes.flags ? changes.flags.currentValue : this.flags;
     const previous = changes.flags ? changes.flags.previousValue : flagsInitial;
     const removedNotification = changes.removedNotification ? changes.removedNotification.currentValue : undefined;
-    console.log(this.notifications);
+
     if (!current.checkAll) {
       this.setUncheckedAll(this.notifications);
     }
@@ -72,6 +79,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
     }
 
     this.isNotificationsEmpty = this.notificationsFiltered.length < 1;
+    this.notificationsOut.emit(this.filterService.sortNotificationsByDate(this.notifications, dateSortOrder.newToOld));
   }
 
   appendToView(incLimit: number) {
@@ -105,22 +113,6 @@ export class NotificationsComponent implements OnInit, OnChanges {
     });
   }
 
-  sendNotifications() {
-    this.notificationsOut.emit(this.notifications);
-  }
-
-  initNotifications() {
-    this.restApiService.receiveItems().subscribe((notifications) => {
-      this.notifications = notifications;
-      this.notificationsFiltered = this.notifications;
-      this.sendNotifications();
-      this.viewLimit = 0;
-      this.appendToView(this.showingNotifications);
-    }, error => {
-      console.log(error.message);
-    });
-  }
-
   nameSort(current: Flags) {
     this.notificationsFiltered = this.filterService.sortNotificationsByName(this.notificationsFiltered, current.nameSortOrder);
   }
@@ -133,11 +125,11 @@ export class NotificationsComponent implements OnInit, OnChanges {
     switch (id) {
       case 'as-archive':
         this.checkedNotifications.forEach(notification => {
-            this.notifications.splice(this.notifications.indexOf(notification),1);
+          this.notifications.splice(this.notifications.indexOf(notification),1);
         });
-        this.checkedNotifications = [];
+        this.setUncheckedAll(this.notifications);
         this.uncheckInput.emit(true);
-        this.sendNotifications();
+        this.notificationsOut.emit(this.notifications);
         break;
       case 'as-read':
         this.notifications = this.notificationsFiltered.map(notification => {
@@ -171,5 +163,4 @@ export class NotificationsComponent implements OnInit, OnChanges {
         break;
     }
   }
-
 }

@@ -10,7 +10,6 @@ import * as moment from "moment";
 export class AppComponent {
   flags: Flags = new Flags();
   notifications: Notification[] = [];
-  notificationsTop: Notification[] = [];
   removedNotification: Notification;
   length: number = 0;
   uncheckInput = false;
@@ -23,12 +22,7 @@ export class AppComponent {
   }
 
   setNotifications(notificationsIn: Notification[]) {
-    this.notifications = Object.assign({}, notificationsIn);
-
-    this.length = notificationsIn.length;
-  }
-  setNotificationsTop(notificationsIn: Notification[]) {
-    this.notificationsTop = notificationsIn;
+    this.notifications = notificationsIn;
     this.length = notificationsIn.length;
   }
 
@@ -37,7 +31,6 @@ export class AppComponent {
   }
 
   setUncheckInput(value: boolean) {
-    console.log('value ', value);
     this.uncheckInput = value;
   }
 }

@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FiltersService} from "../../services/filters.service";
 
 @Component({
   host: {'(document:click)':'showNotifications($event.target)'},
@@ -13,13 +14,13 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
   notifications: Notification[] = [];
   visibility = false;
 
-  constructor() { }
+  constructor(private filterService: FiltersService) { }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.notifications = changes.notificationsIn.currentValue;
+    this.notifications = changes.notificationsIn ? changes.notificationsIn.currentValue : this.notifications;
   }
 
   showNotifications(target: HTMLElement) {
@@ -42,7 +43,6 @@ export class NotificationsTopComponent implements OnInit, OnChanges {
 
   deleteNotification(notification: Notification) {
     this.notifications.splice(this.notifications.indexOf(notification),1);
-    //this.notificationsOutTop.emit(this.notifications);
     this.removedNotification.emit(notification);
   }
 }

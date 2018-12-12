@@ -1,15 +1,15 @@
 import * as moment from 'moment';
 
 export class Notification {
-  type = '';
-  typeRu = '';
-  name = '';
+  type:string = '';
+  typeRu:string = '';
+  name:string = '';
   date: Date;
-  dateString = '';
+  dateString:string = '';
   important = false;
-  importanceRu = '';
-  text = '';
-  textPreview = '';
+  importanceRu:string = '';
+  text:string = '';
+  textPreview:string = '';
   checked = false;
   read = false;
   archive = false;
@@ -24,11 +24,6 @@ export class Notification {
   };
 
   constructor(json_item?: any) {
-    const options = {
-      day: '2-digit',
-      month: 'short'
-    };
-
     if (!json_item) {
       return;
     }
@@ -48,6 +43,7 @@ export class Notification {
     if (json_item.importance === 'Важно') {
       this.important = true;
     }
+
     this.importanceRu = json_item.importance;
     this.typeRu = json_item.type;
     this.name = json_item.name;
