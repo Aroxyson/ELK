@@ -1,4 +1,13 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {RestApiService} from '../../services/rest-api.service';
 import {Notification} from '../../core/notification';
 import {FiltersService} from '../../services/filters.service';
@@ -9,13 +18,15 @@ import {dateSortOrder} from "../../core/dateSortOrder";
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css']
+  styleUrls: ['./notifications.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationsComponent implements OnInit, OnChanges {
   @Input() flags: Flags;
   @Input() removedNotification: Notification;
   @Output() notificationsOut: EventEmitter<Notification[]> = new EventEmitter<Notification[]>();
   @Output() uncheckInput: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() checkedLength: EventEmitter<number> = new EventEmitter<number>();
 
   notifications: Notification[] = [];
   notificationsFiltered: Notification[] = [];
@@ -25,8 +36,9 @@ export class NotificationsComponent implements OnInit, OnChanges {
   showingNotifications: number = 10;
   isNotificationsEmpty = false;
   lastSort: Function = function () {};
+  count = 0;
 
-  constructor(private restApiService: RestApiService, private filterService: FiltersService) {
+  constructor(private restApiService: RestApiService, private filterService: FiltersService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -104,6 +116,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
     } else {
       this.checkedNotifications.splice(this.checkedNotifications.indexOf(notification), 1);
     }
+    this.checkedLength.emit(this.checkedNotifications.length);
   }
 
   setUncheckedAll(notifications: Notification[]) {
@@ -119,35 +132,6 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
   dateSort(current: Flags) {
     this.notificationsFiltered = this.filterService.sortNotificationsByDate(this.notificationsFiltered, current.dateSortOrder);
-  }
-
-  markAs(id: string) {
-    switch (id) {
-      case 'as-archive':
-        this.checkedNotifications.forEach(notification => {
-          this.notifications.splice(this.notifications.indexOf(notification),1);
-        });
-        this.setUncheckedAll(this.notifications);
-        this.uncheckInput.emit(true);
-        this.notificationsOut.emit(this.notifications);
-        break;
-      case 'as-read':
-        this.notifications = this.notificationsFiltered.map(notification => {
-          if (notification.checked) {
-            notification.read = true;
-          }
-          return notification;
-        });
-        break;
-      case 'as-important':
-        this.notifications = this.notificationsFiltered.map(notification => {
-          if (notification.checked) {
-            notification.important = true;
-          }
-          return notification;
-        });
-        break;
-    }
   }
 
   markPopupAs(notification: Notification, id: string) {

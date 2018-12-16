@@ -106,6 +106,15 @@ export class FiltersService {
       return a.date > b.date ? 1 : -1;
     };
 
+    const notificationsTemp: Notification[] = Object.assign({}, notifications);
+    console.log(notificationsTemp);
+    console.log('noti', notifications);
+
+    if (!notifications || notifications.length === 0) {
+      console.log('ddfdfdfd');
+      return [];
+    }
+
     switch (order) {
       case dateSortOrder.disabled:
         return notifications;
@@ -118,7 +127,8 @@ export class FiltersService {
         };
         break;
     }
-    return notifications.sort(comparator);
+
+    return notificationsTemp.sort(comparator);
   }
 
   removeNotification(notifications: Notification[], notification: Notification): Notification[] {

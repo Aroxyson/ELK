@@ -1,13 +1,7 @@
-<div *ngIf="checkedNotifications.length > 0" class="btn-group notif-action-group">
-  <button (click)="markAs($event.target.id)" class="notif-action" id="as-archive">Архивировать</button>
-  <button (click)="markAs($event.target.id)" class="notif-action" id="as-read">Отметить как прочитанное</button>
-  <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
-</div>
-
 <div *ngFor="let notification of notificationsFiltered | slice:0:viewLimit"
      (click)="setPopupData($event, notification)"
      class="row py-3 border-bottom notification"
-     data-toggle="modal" data-target=".bd-example-modal-lg">
+     data-toggle="modal" data-target=".bd-example-modal-lg">{{count}}
   <div class="col-md-3">
     <label class="notif-checkbox">
       <input

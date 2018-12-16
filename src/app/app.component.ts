@@ -12,6 +12,7 @@ export class AppComponent {
   notifications: Notification[] = [];
   removedNotification: Notification;
   length: number = 0;
+  checkedLength: number = 0;
   uncheckInput = false;
 
   constructor() {
@@ -32,5 +33,9 @@ export class AppComponent {
 
   setUncheckInput(value: boolean) {
     this.uncheckInput = value;
+  }
+
+  setCheckedLength(length: number) {
+    this.checkedLength = length;
   }
 }

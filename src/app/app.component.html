@@ -87,10 +87,12 @@
     <div class="col-md-9">
       <app-filters
         (flagsOut)="setFlags($event)"
-        [uncheckInputIn]="uncheckInput"></app-filters>
+        [uncheckInputIn]="uncheckInput"
+        [checkedLengthIn]="checkedLength"></app-filters>
       <app-notifications
         (notificationsOut)="setNotifications($event)"
         (uncheckInput)="setUncheckInput($event)"
+        (checkedLength)="setCheckedLength($event)"
         [flags]="flags"
         [removedNotification]="removedNotification"></app-notifications>
       <div class="row">

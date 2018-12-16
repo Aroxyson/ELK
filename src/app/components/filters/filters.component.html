@@ -110,5 +110,10 @@
         </label>
       </div>
     </div>
+    <div *ngIf="checkedLength > 0" class="btn-group notif-action-group">
+      <button (click)="markAs($event.target.id)" class="notif-action" id="as-archive">Архивировать</button>
+      <button (click)="markAs($event.target.id)" class="notif-action" id="as-read">Отметить как прочитанное</button>
+      <button (click)="markAs($event.target.id)" class="notif-action" id="as-important">Отметить как важное</button>
+    </div>
   </div>
 </div>

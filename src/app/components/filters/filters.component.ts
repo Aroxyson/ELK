@@ -13,6 +13,7 @@ import {nameSortOrder} from "../../core/nameSortOrder";
 })
 export class FiltersComponent implements OnInit, OnChanges {
   @Input() uncheckInputIn: boolean;
+  @Input() checkedLengthIn: number;
   @Output() flagsOut: EventEmitter<Flags> = new EventEmitter<Flags>();
 
   private flags = new Flags();
@@ -21,6 +22,7 @@ export class FiltersComponent implements OnInit, OnChanges {
   private datePattern: Array<string> = ['DD-MM-YYYY', 'DD.MM.YYYY', 'DD/MM/YYYY'];
   dateForm: FormGroup;
   checkAllForm: FormGroup;
+  checkedLength: number;
   isDatePeriodWrong = false;
   inputDateDisabled = true;
 
@@ -41,6 +43,8 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (changes.uncheckInputIn.currentValue) {
       this.checkAllForm.controls['checkAll'].setValue(false);
     }
+
+    this.checkedLength = changes.checkedLength ? changes.checkedLength.currentValue : 0;
   }
 
   get startDate() {return this.dateForm.get('startDate'); }
@@ -165,6 +169,40 @@ export class FiltersComponent implements OnInit, OnChanges {
       }
     }
   }
+
+  // markAs(id: string) {
+  //   switch (id) {
+  //     case 'as-archive':
+  //       this.checkedNotifications.forEach(notification => {
+  //         this.notifications.splice(this.notifications.indexOf(notification),1);
+  //       });
+  //       this.setUncheckedAll(this.notifications);
+  //       this.uncheckInput.emit(true);
+  //       this.notificationsOut.emit(this.notifications);
+  //       this.count++;
+  //       this.cdr.detectChanges();
+  //       // const flagsFake: Flags = this.flags;
+  //       // flagsFake.checkAll = false;
+  //       // this.flags = Object.assign({}, flagsFake);
+  //       break;
+  //     case 'as-read':
+  //       this.notifications = this.notificationsFiltered.map(notification => {
+  //         if (notification.checked) {
+  //           notification.read = true;
+  //         }
+  //         return notification;
+  //       });
+  //       break;
+  //     case 'as-important':
+  //       this.notifications = this.notificationsFiltered.map(notification => {
+  //         if (notification.checked) {
+  //           notification.important = true;
+  //         }
+  //         return notification;
+  //       });
+  //       break;
+  //   }
+  // }
 }
 
 export function dateValidator(form: FormControl) {
